@@ -20,5 +20,5 @@ class OfferedCourse{
         void write_general_info(vector<string>& output);
         void write_detailed_info(vector<string>& output);
 
-        int get_id(){return id;}
+        int get_id();
 };

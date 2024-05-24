@@ -1,0 +1,4 @@
+POST login ? id 810102467 password 13840118!sfda
+POST post ? title "salam" message "bia"
+GET personal_page ? id 810102467
+GET post ? id 1  post_id 1

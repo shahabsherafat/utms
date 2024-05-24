@@ -7,6 +7,6 @@ class Major{
         string name;
     public:
         Major(int init_id, string init_name);
-        // void print();
-
+        int get_id();
+        string get_name();
 };

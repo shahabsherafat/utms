@@ -13,9 +13,3 @@ class Course{
         // void print();
 
 };
-
-class OfferedCourse : public Course{
-    int capacity;
-    string professor_name;
-    
-};

@@ -5,6 +5,14 @@ Major::Major(int init_id, string init_name){
     name = init_name;
 }
 
+string Major::get_name(){
+    return name;
+}
+
+int Major::get_id(){
+    return id;
+}
+
 // void Major::print(){
 //     cout << "Major : " << endl << id << endl << name << endl;
 // }

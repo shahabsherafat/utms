@@ -4,6 +4,33 @@ IOManager::IOManager(SocialMedia* social_media){
     utms = social_media;
 }
 
+bool IOManager::is_number(string id){
+    try{
+        stoi(id);
+        return true;
+    }
+
+    catch(exception& e){
+        return false;
+    }
+}
+
+bool IOManager::is_natural(string id){
+    if(is_number(id)){
+        return stoi(id) > 0;
+    }
+
+    return false;
+}
+
+bool IOManager::is_arithmetic(string id){
+    if(is_number(id)){
+        return stoi(id) >= 0;
+    }
+
+    return false;
+}
+
 void IOManager::read_courses(string courses_file_address){
     string line;
     ifstream file(courses_file_address);
@@ -114,12 +141,66 @@ void IOManager::handle_POST_request(stringstream& line_stream){
     else if(command == LOGOUT_COMMAND)
         handle_logout();
 
+    else if(command == ADD_POST_COMMAND)
+        handle_add_post(line_stream);
+
+    else if(command == CONNECT_COMMAND)
+        handle_connect(line_stream);
+
     //Other commands will be added later.
 
     else
         throw runtime_error(NOT_FOUND_RESPONSE);
     
 }
+
+void IOManager::handle_GET_request(stringstream& line_stream){
+    string command, sign;
+    line_stream >> command >> sign;
+
+    if(command == SEE_COURSES_COMMAND)
+        handle_see_courses(line_stream);
+
+    else if(command == SEE_PAGE_COMMAND)
+        handle_see_personal_page(line_stream);
+
+    else if(command == SEE_POST_COMMAND)
+        handle_see_post(line_stream);
+
+    else if(command == SEE_NOTIFICATIONS_COMMAND){
+        handle_see_notifications();
+    }
+
+    //Other commands will be added later.
+
+    else
+        throw runtime_error(NOT_FOUND_RESPONSE);
+    
+}
+
+void IOManager::handle_DELETE_request(stringstream& line_stream){
+    string command, sign;
+    line_stream >> command >> sign;
+
+    if(sign != QUESTION_MARK)
+        throw runtime_error(BAD_REQUEST_RESPONSE);
+
+    if(command == REMOVE_POST_COMMAND)
+        handle_remove_post_by_id(line_stream);
+
+
+
+    //Other commands will be added later.
+
+    else
+        throw runtime_error(NOT_FOUND_RESPONSE);
+}
+
+void IOManager::handle_PUT_request(stringstream& line_stream){
+
+}
+
+
 
 void IOManager::handle_login(stringstream& arguments){
     string parameter1, value1, parameter2, value2;
@@ -153,36 +234,80 @@ void IOManager::handle_logout(){
     cout << SUCCESS_RESPONSE << endl;
 }
 
-bool IOManager::is_number(string id){
-    try{
-        stoi(id);
-        return true;
+void IOManager::handle_add_post(stringstream& arguments){
+    string parameter1, value1, parameter2, value2, temp = arguments.str();
+    int index;
+    arguments >> parameter1;
+    index = temp.find(DOUBLE_QUOTATION);
+
+    if(index == -1){
+        throw runtime_error(BAD_REQUEST_RESPONSE);
     }
 
-    catch(exception& e){
-        return false;
+    temp.erase(0, index+1);
+    index = temp.find(DOUBLE_QUOTATION);
+
+    if(index == -1){
+        throw runtime_error(BAD_REQUEST_RESPONSE);
     }
-}
 
-bool IOManager::is_natural(string id){
-    if(is_number(id)){
-        return stoi(id) > 0;
+    value1 = temp.substr(0, index);
+    temp.erase(0, index+1);
+    arguments.str(temp);
+
+    arguments >> parameter2;
+    index = temp.find(DOUBLE_QUOTATION);
+
+    if(index == -1){
+        throw runtime_error(BAD_REQUEST_RESPONSE);
     }
+
+    temp.erase(0, index+1);
+    index = temp.find(DOUBLE_QUOTATION);
+
+    if(index == -1){
+        throw runtime_error(BAD_REQUEST_RESPONSE);
+    }
+
+    value2 = temp.substr(0, index);
+
+    if(parameter1 == TITLE_PARAMETER and parameter2 == MESSAGE_PARAMETER){
+        utms->add_post(DOUBLE_QUOTATION + value1 + DOUBLE_QUOTATION, DOUBLE_QUOTATION + value2 + DOUBLE_QUOTATION);
+    }
+
+    else if(parameter1 == MESSAGE_PARAMETER and parameter2 == TITLE_PARAMETER){
+        utms->add_post(DOUBLE_QUOTATION + value2 + DOUBLE_QUOTATION, DOUBLE_QUOTATION + value1 + DOUBLE_QUOTATION);
+    }
+
+    else{
+        throw runtime_error(BAD_REQUEST_RESPONSE);
+    }
+
+    cout << SUCCESS_RESPONSE << endl;
 }
 
-void IOManager::handle_GET_request(stringstream& line_stream){
-    string command, sign;
-    line_stream >> command >> sign;
+void IOManager::handle_connect(stringstream& arguments){
+    string parameter1, value1;
+    arguments >> parameter1 >> value1;
+    vector<string> output;
 
-    if(command == SEE_COURSES_COMMAND)
-        handle_see_courses(line_stream);
+    if(parameter1 == ID_PARAMETER){
+        if(!is_natural(value1)){
+            throw runtime_error(BAD_REQUEST_RESPONSE);
+        }
 
-    //Other commands will be added later.
+        utms -> connect(stoi(value1));
+    }
 
-    else
-        throw runtime_error(NOT_FOUND_RESPONSE);
-    
+    else{
+        throw runtime_error(BAD_REQUEST_RESPONSE);
+    }
+
+    cout << SUCCESS_RESPONSE << endl;
 }
+
+
+
 
 void IOManager::handle_see_courses(stringstream& arguments){
     string parameter1, value1;
@@ -206,10 +331,80 @@ void IOManager::handle_see_courses(stringstream& arguments){
     }
 }
 
-void IOManager::handle_DELETE_request(stringstream& line_stream){
+void IOManager::handle_see_personal_page(stringstream& arguments){
+    string parameter1, value1;
+    arguments >> parameter1 >> value1;
+    vector<string> output;
 
+    if(parameter1 == ID_PARAMETER){
+        if(!is_arithmetic(value1)){
+            throw runtime_error(BAD_REQUEST_RESPONSE);
+        }
+
+        utms->write_page_info_by_id(stoi(value1), output);
+    }
+
+    else{
+        throw runtime_error(BAD_REQUEST_RESPONSE);
+    }
+
+    for(string response : output){
+        cout << response;
+    }
 }
 
-void IOManager::handle_PUT_request(stringstream& line_stream){
+void IOManager::handle_see_post(stringstream& arguments){
+    string parameter1, value1, parameter2, value2;
+    arguments >> parameter1 >> value1 >> parameter2 >> value2; 
+    vector<string> output;
 
+    if(!is_natural(value1) or !is_natural(value2)){
+        throw runtime_error(BAD_REQUEST_RESPONSE);
+    }
+
+    if(parameter1 == ID_PARAMETER and parameter2 == POST_ID_PARAMETER){
+        utms->write_post_by_id(stoi(value1), stoi(value2), output);
+    }
+
+    else if(parameter1 == POST_ID_PARAMETER and parameter2 == ID_PARAMETER){
+        utms->write_post_by_id(stoi(value2), stoi(value1), output);
+    }
+
+    else{
+        throw runtime_error(BAD_REQUEST_RESPONSE);
+    }
+
+    for(string response : output){
+        cout << response;
+    }
+}
+
+void IOManager::handle_see_notifications(){
+    vector<string> output;
+    utms -> write_notifications(output);
+
+    for(string response : output){
+        cout << response;
+    }
+}
+
+
+
+void IOManager::handle_remove_post_by_id(stringstream& arguments){
+    string parameter1, value1;
+    arguments >> parameter1 >> value1;
+
+    if(parameter1 == ID_PARAMETER){
+        if(!is_natural(value1)){
+            throw runtime_error(BAD_REQUEST_RESPONSE);
+        }
+
+        utms->remove_post(stoi(value1));
+    }
+
+    else{
+        throw runtime_error(BAD_REQUEST_RESPONSE);
+    }
+
+    cout << SUCCESS_RESPONSE << endl;
 }

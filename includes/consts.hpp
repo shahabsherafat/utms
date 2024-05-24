@@ -7,6 +7,7 @@
 #include <random>
 #include <string>
 #include <vector>
+#include <algorithm>
 
 using namespace std;
 
@@ -20,6 +21,7 @@ const string COLON = ":";
 const string DASH = "-";
 const string SLASH = "/";
 const string NEWLINE = "\n";
+const char DOUBLE_QUOTATION = '\"';
 
 const string POST_REQUEST = "POST";
 const string GET_REQUEST = "GET";
@@ -40,13 +42,15 @@ const string REMOVE_POST_COMMAND = "post";
 const string SEE_PAGE_COMMAND = "personal_page";
 const string SEE_POST_COMMAND = "post";
 const string CONNECT_COMMAND = "connect";
-const string NOTIFY_COMMAND = "notification";
+const string SEE_NOTIFICATIONS_COMMAND = "notification";
 
 const string ID_PARAMETER = "id";
 const string PASSWORD_PARAMETER = "password";
 const string TITLE_PARAMETER = "title";
 const string MESSAGE_PARAMETER = "message";
 const string POST_ID_PARAMETER = "post_id";
+
+const string NEW_POST_NOTIFICATION = "New Post";
 
 
 #define debug(x) cout << x << endl, exit(0);
