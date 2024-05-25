@@ -17,7 +17,9 @@ bool User::is_authenticated(string entered_password){
 void User::add_post(string title, string message){
     last_post_id ++;
     Post* new_post = new Post(title, message, last_post_id);
-    notify_to_connected_users(to_string(id) + SPACE + name + COLON + SPACE + NEW_POST_NOTIFICATION + NEWLINE);
+    notif n;
+    n.user_name = name;n.user_id = id;n.notif_message = NEW_POST_NOTIFICATION;
+    notify_to_connected_users(n);
     posts.push_back(new_post);
 }
 
@@ -33,9 +35,6 @@ void User::remove_post(int id){
     throw runtime_error(NOT_FOUND_RESPONSE);
 }
 
-void User::write_post_by_id(int id, vector<string>& output){
-}
-
 void User::connect(User* connected){
     for(User* u : connected_users){
         if(u -> get_id() == connected->get_id()){
@@ -46,13 +45,13 @@ void User::connect(User* connected){
     connected_users.push_back(connected);
 }
 
-void User::add_notification(string notification_text){
-    notifications.push_back(notification_text);
+void User::add_notification(notif n){
+    notifications.push_back(n);
 }
 
-void User::notify_to_connected_users(string notification_text){
+void User::notify_to_connected_users(notif n){
     for(User* u : connected_users){
-        u->add_notification(notification_text);
+        u->add_notification(n);
     }
 }
 
@@ -61,6 +60,30 @@ void User::write_notifications(vector<string>& output){
         throw runtime_error(EMPTY_RESPONSE);
     }
     
-    output = notifications;
+    for(notif n : notifications){
+        output.push_back(to_string(n.user_id) + SPACE + n.user_name + COLON + SPACE + n.notif_message + NEWLINE);
+    }
+
     notifications.clear();
+}
+
+void User::write_post_by_id(int id, vector<string>& output){
+    output.push_back(get_personal_info_string());
+
+    for(Post* p : posts){
+        if(p->get_id() == id){
+            output.push_back(to_string(id) + SPACE + p->get_title() + SPACE + p->get_message() + NEWLINE);
+            return;
+        }
+    }
+
+    throw runtime_error(NOT_FOUND_RESPONSE);
+}
+
+void User::write_page_info(vector<string>& output){
+    output.push_back(get_personal_info_string());
+
+    for(Post* p : posts){
+        output.push_back(to_string(p->get_id()) + SPACE + p->get_title() + NEWLINE);
+    }
 }

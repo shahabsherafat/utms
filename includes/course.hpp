@@ -10,6 +10,7 @@ class Course{
         vector<int> major_ids;
     public:
         Course(int init_id, string init_name, int init_credit, int init_prerequisite, vector<int> major_ids);
-        // void print();
-
+        int get_id();
+        string get_name();
+        bool can_take_this_course(int major_id);
 };

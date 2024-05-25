@@ -1,7 +1,8 @@
 #include "../includes/socialmedia.hpp"
 
 SocialMedia::SocialMedia(){
-
+    Admin* admin = new Admin(ADMIN_ID, ADMIN_PASSWORD, ADMIN_NAME);
+    users.push_back(admin);
 }
 
 void SocialMedia::add_course(int id, string name, int credit, int prerequisite, vector<int> major_ids){
@@ -45,6 +46,22 @@ User* SocialMedia::find_user_by_id(int id){
     throw runtime_error(NOT_FOUND_RESPONSE);
 }
 
+Course* SocialMedia::find_course_by_id(int id){
+    for(Course* c : courses){
+        if(c->get_id() == id){
+            return c;
+        }
+    }
+
+    throw runtime_error(NOT_FOUND_RESPONSE);
+}
+
+void SocialMedia::notify_every_one(notif n){
+    for(User* u : users){
+        u -> add_notification(n);
+    }
+}
+
 void SocialMedia::login(int id, string password){
     if(is_logged_in){
         throw runtime_error(PERMISSION_DENIED_RESPONSE);
@@ -76,6 +93,14 @@ void SocialMedia::add_post(string title, string message){
         throw runtime_error(PERMISSION_DENIED_RESPONSE);
     }
 
+    if(dynamic_cast<Admin*>(logged_in_user)){
+        notif n;
+        n.user_id = ADMIN_ID;
+        n.user_name = ADMIN_NAME;
+        n.notif_message = NEW_POST_NOTIFICATION;
+        notify_every_one(n);
+    }
+
     logged_in_user->add_post(title, message);
 }
 
@@ -84,7 +109,7 @@ void SocialMedia::connect(int id){
         throw runtime_error(PERMISSION_DENIED_RESPONSE);
     }
 
-    if(id == logged_in_user -> get_id()){
+    if(id == logged_in_user -> get_id() or dynamic_cast<Admin*>(logged_in_user)){
         throw runtime_error(BAD_REQUEST_RESPONSE);
     }
 
@@ -129,21 +154,64 @@ void SocialMedia::write_notifications(vector<string>& output){
     logged_in_user -> write_notifications(output);
 }
 
+Time SocialMedia::make_time_by_string(string time_string){
+    stringstream time_factors(time_string);
+    string weekday, start_end, startstr, endstr;
+    getline(time_factors, weekday, COLON);
+    getline(time_factors, start_end);
+    stringstream interavl(start_end);
+    getline(interavl, startstr, DASH);
+    getline(interavl, endstr, DASH);
+    Time t(weekday, stoi(startstr), stoi(endstr));
+    return t;
+}
 
+Date SocialMedia::make_date_by_string(string date_string){
+    stringstream date_factors(date_string);
+    string year_string, month_string, day_string;
+    getline(date_factors, year_string, SLASH);
+    getline(date_factors, month_string, SLASH);
+    getline(date_factors, day_string, SLASH);
+    Date d(stoi(year_string), stoi(month_string), stoi(day_string));
+    return d;
+}
+
+void SocialMedia::offer_new_course(int course_id, int professor_id, int capacity, string time,
+                      string date, int class_number){
+    if(!dynamic_cast<Admin*>(logged_in_user)){
+        throw runtime_error(PERMISSION_DENIED_RESPONSE);
+    }
+
+    Course* course = find_course_by_id(course_id);
+    User* unknown_user = find_user_by_id(professor_id);
+    if(!dynamic_cast<Professor*>(unknown_user)){
+        throw runtime_error(PERMISSION_DENIED_RESPONSE);
+    }
+    
+    Professor* professor = (Professor*) unknown_user;
+    if(!course -> can_take_this_course(professor -> get_major_id())){
+        throw runtime_error(PERMISSION_DENIED_RESPONSE);
+    }
+    
+    Time course_time = make_time_by_string(time);
+    professor -> add_working_time(course_time);
+    Date exam_date = make_date_by_string(date);
+
+    last_offered_course_id ++;
+    OfferedCourse* new_offered_course = new OfferedCourse(last_offered_course_id, course -> get_name(), capacity,
+    class_number, professor -> get_name(), course_time, exam_date);
+    offered_courses.push_back(new_offered_course);
+
+    notif n;
+    n.user_id = professor -> get_id();
+    n.user_name = professor -> get_name();
+    n.notif_message = NEW_OFFERED_COURSE_NOTIFICATION;
+
+    notify_every_one(n);
+}
 
 
 
 void SocialMedia::remove_post(int id){
     logged_in_user->remove_post(id);
 }
-
-
-
-// void SocialMedia::test_print(){
-//     for(Course* c : courses)
-//         c->print();
-//     for(Major* m : majors)
-//         m->print();
-//     for(User* u : users)
-//         u->print();
-// }

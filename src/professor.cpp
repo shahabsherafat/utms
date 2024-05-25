@@ -30,24 +30,20 @@ string Professor::get_personal_info_string(){
     return personal_info;
 }
 
-
-void Professor::write_page_info(vector<string>& output){
-    output.push_back(get_personal_info_string());
-
-    for(Post* p : posts){
-        output.push_back(to_string(p->get_id()) + SPACE + p->get_title() + NEWLINE);
-    }
+int Professor::get_major_id(){
+    return major_id;
 }
 
-void Professor::write_post_by_id(int id, vector<string>& output){
-    output.push_back(get_personal_info_string());
+string Professor::get_name(){
+    return name;
+}
 
-    for(Post* p : posts){
-        if(p->get_id() == id){
-            output.push_back(to_string(id) + SPACE + p->get_title() + SPACE + p->get_message() + NEWLINE);
-            return;
+void Professor::add_working_time(Time t){
+    for(Time time : working_times){
+        if(time.intersects(t)){
+            throw runtime_error(PERMISSION_DENIED_RESPONSE);
         }
     }
 
-    throw runtime_error(NOT_FOUND_RESPONSE);
+    working_times.push_back(t);
 }

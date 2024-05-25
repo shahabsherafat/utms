@@ -31,6 +31,19 @@ bool IOManager::is_arithmetic(string id){
     return false;
 }
 
+int IOManager::find_index(const vector<string>& parameters, string parameter){
+    auto it = find(parameters.begin(), parameters.end(), parameter);
+
+    if (it != parameters.end()){ 
+        int index = it - parameters.begin(); 
+        return index; 
+    } 
+
+    else{ 
+        throw runtime_error(BAD_REQUEST_RESPONSE);
+    } 
+}
+
 void IOManager::read_courses(string courses_file_address){
     string line;
     ifstream file(courses_file_address);
@@ -147,6 +160,9 @@ void IOManager::handle_POST_request(stringstream& line_stream){
     else if(command == CONNECT_COMMAND)
         handle_connect(line_stream);
 
+    else if(command == COURSE_OFFER_COMMAND)
+        handle_course_offer(line_stream);
+
     //Other commands will be added later.
 
     else
@@ -207,7 +223,7 @@ void IOManager::handle_login(stringstream& arguments){
     arguments >> parameter1 >> value1 >> parameter2 >> value2;
 
     if(parameter1 == ID_PARAMETER and parameter2 == PASSWORD_PARAMETER){
-        if(!is_natural(value1)){
+        if(!is_arithmetic(value1)){
             throw runtime_error(BAD_REQUEST_RESPONSE);
         }
 
@@ -215,7 +231,7 @@ void IOManager::handle_login(stringstream& arguments){
     }
 
     else if(parameter1 == PASSWORD_PARAMETER and parameter2 == ID_PARAMETER){
-        if(!is_natural(value2)){
+        if(!is_arithmetic(value2)){
             throw runtime_error(BAD_REQUEST_RESPONSE);
         }
 
@@ -306,6 +322,47 @@ void IOManager::handle_connect(stringstream& arguments){
     cout << SUCCESS_RESPONSE << endl;
 }
 
+void IOManager::handle_course_offer(stringstream& arguments){
+    vector<string> parameters(NUM_OF_COURSE_OFFER_ARGUMENTS), values(NUM_OF_COURSE_OFFER_ARGUMENTS);
+
+    int course_id, professor_id, capacity, class_number;
+    string time, exam_date, temp;
+
+    for(int i = 0; i < NUM_OF_COURSE_OFFER_ARGUMENTS; i++){
+        arguments >> parameters[i];
+        arguments >> values[i];
+    }
+
+    temp = values[find_index(parameters, COURSE_ID_PARAMETER)];
+    if(!is_natural(temp)){
+        throw runtime_error(BAD_REQUEST_RESPONSE);
+    }
+    course_id = stoi(temp);
+
+    temp = values[find_index(parameters, PROFESSOR_ID_PARAMETER)];
+    if(!is_natural(temp)){
+        throw runtime_error(BAD_REQUEST_RESPONSE);
+    }
+    professor_id = stoi(temp);
+
+    temp = values[find_index(parameters, CAPACITY_PARAMETER)];
+    if(!is_natural(temp)){
+        throw runtime_error(BAD_REQUEST_RESPONSE);
+    }
+    capacity = stoi(temp);
+
+    temp = values[find_index(parameters, CLASS_NUMBER_PARAMETER)];
+    if(!is_natural(temp)){
+        throw runtime_error(BAD_REQUEST_RESPONSE);
+    }
+    class_number = stoi(temp);
+
+    time = values[find_index(parameters, TIME_PARAMETER)];
+    exam_date = values[find_index(parameters, EXAM_DATE_PARAMETER)];
+
+    utms -> offer_new_course(course_id, professor_id, capacity, time, exam_date, class_number);
+    cout << SUCCESS_RESPONSE << endl;
+}
 
 
 

@@ -8,9 +8,20 @@ Course::Course(int init_id, string init_name, int init_credit, int init_prerequi
     major_ids = init_major_ids;
 }
 
-// void Course::print(){
-//     cout << "Course : " << endl << id << endl << name << endl << credit << endl << prerequisite << endl;
-//     for(int i : major_ids){
-//         cout << "mid : " << i << endl;
-//     }
-// }
+int Course::get_id(){
+    return id;
+}
+
+string Course::get_name(){
+    return name;
+}
+
+bool Course::can_take_this_course(int major_id){
+    if(find(major_ids.begin(), major_ids.end(), major_id) != major_ids.end()){
+        return true;
+    }
+
+    else{
+        return false;
+    }
+}

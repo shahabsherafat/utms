@@ -24,6 +24,7 @@ class IOManager{
         void handle_logout();
         void handle_add_post(stringstream& arguments);
         void handle_connect(stringstream& arguments);
+        void handle_course_offer(stringstream& arguments);
 
         void handle_see_courses(stringstream& arguments);
         void handle_see_personal_page(stringstream& arguments);
@@ -39,6 +40,7 @@ class IOManager{
         bool is_number(string id);
         bool is_natural(string id);
         bool is_arithmetic(string id);
+        int find_index(const vector<string>& input, string parameter);
         
 
 
