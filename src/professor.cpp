@@ -17,11 +17,11 @@ string Professor::get_personal_info_string(){
 
         for(int i = 0; i<offered_courses.size(); i++){
             if(i == offered_courses.size() - 1){
-                personal_info += offered_courses[i];
+                personal_info += offered_courses[i] -> get_name();
             }
 
             else{
-                personal_info += offered_courses[i] + COMMA;
+                personal_info += offered_courses[i] -> get_name() + COMMA;
             }
         }
     }
@@ -38,12 +38,14 @@ string Professor::get_name(){
     return name;
 }
 
-void Professor::add_working_time(Time t){
-    for(Time time : working_times){
-        if(time.intersects(t)){
+void Professor::add_offered_course(OfferedCourse* o){
+    Time time = o->get_holding_time();
+
+    for(OfferedCourse* of : offered_courses){
+        if(of->get_holding_time().intersects(time)){
             throw runtime_error(PERMISSION_DENIED_RESPONSE);
         }
     }
-
-    working_times.push_back(t);
+    
+    offered_courses.push_back(o);
 }

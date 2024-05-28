@@ -23,6 +23,8 @@ const char SLASH = '/';
 const string NEWLINE = "\n";
 const char DOUBLE_QUOTATION = '\"';
 
+const int STARTING_OFFERED_COURSES_ID = 1;
+
 const int ADMIN_ID = 0;
 const string ADMIN_PASSWORD = "UT_account";
 const string ADMIN_NAME = "UT_account";
@@ -48,7 +50,11 @@ const string SEE_POST_COMMAND = "post";
 const string CONNECT_COMMAND = "connect";
 const string SEE_NOTIFICATIONS_COMMAND = "notification";
 const string COURSE_OFFER_COMMAND = "course_offer";
+const string COURSE_ENROLLMENT_COMMAND = "my_courses";
+const string REMOVE_ENROLLED_COURSE_COMMAND = "my_courses";
+const string SEE_ENROLLED_COURSES_COMMAND = "my_courses";
 const int NUM_OF_COURSE_OFFER_ARGUMENTS = 6;
+
 
 const string ID_PARAMETER = "id";
 const string PASSWORD_PARAMETER = "password";

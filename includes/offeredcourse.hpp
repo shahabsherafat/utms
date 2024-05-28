@@ -7,6 +7,7 @@ class OfferedCourse{
     private:
         int id;
         string name;
+        int source_course_id;
         int capacity;
         int class_number;
         string professor_name;
@@ -14,11 +15,16 @@ class OfferedCourse{
         Date exam_date;
 
     public:
-        OfferedCourse(int init_id, string init_name, int init_capacity,int init_class_number,
+        OfferedCourse(int init_id, string init_name,int course_id, int init_capacity,int init_class_number,
                       string init_professor_name, Time ht, Date ed);
 
         void write_general_info(vector<string>& output);
         void write_detailed_info(vector<string>& output);
 
         int get_id();
+        string get_name();
+        int get_course_id();
+        Time get_holding_time();
+        Date get_exam_date();
+        
 };

@@ -6,6 +6,12 @@ User::User(int init_id, string init_password, string init_name){
     password = init_password;
 }
 
+User::~User(){
+    for(Post* p : posts){
+        delete p;
+    }
+}
+
 int User::get_id(){
     return id;
 }
@@ -60,8 +66,9 @@ void User::write_notifications(vector<string>& output){
         throw runtime_error(EMPTY_RESPONSE);
     }
     
-    for(notif n : notifications){
-        output.push_back(to_string(n.user_id) + SPACE + n.user_name + COLON + SPACE + n.notif_message + NEWLINE);
+    for(int i = notifications.size() - 1; i >= 0; i--){
+        output.push_back(to_string(notifications[i].user_id) + SPACE + notifications[i].user_name +
+                         COLON + SPACE + notifications[i].notif_message + NEWLINE);
     }
 
     notifications.clear();
@@ -83,7 +90,7 @@ void User::write_post_by_id(int id, vector<string>& output){
 void User::write_page_info(vector<string>& output){
     output.push_back(get_personal_info_string());
 
-    for(Post* p : posts){
-        output.push_back(to_string(p->get_id()) + SPACE + p->get_title() + NEWLINE);
+    for(int i = posts.size() - 1; i >= 0; i--){
+        output.push_back(to_string(posts[i]->get_id()) + SPACE + posts[i]->get_title() + NEWLINE);
     }
 }

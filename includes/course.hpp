@@ -12,5 +12,6 @@ class Course{
         Course(int init_id, string init_name, int init_credit, int init_prerequisite, vector<int> major_ids);
         int get_id();
         string get_name();
-        bool can_take_this_course(int major_id);
+        bool can_professor_take_this_course(int major_id);
+        bool can_student_take_this_course(int major_id, int semester);
 };

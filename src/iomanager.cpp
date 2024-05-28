@@ -35,11 +35,11 @@ int IOManager::find_index(const vector<string>& parameters, string parameter){
     auto it = find(parameters.begin(), parameters.end(), parameter);
 
     if (it != parameters.end()){ 
-        int index = it - parameters.begin(); 
+        int index = it - parameters.begin();
         return index; 
     } 
 
-    else{ 
+    else{
         throw runtime_error(BAD_REQUEST_RESPONSE);
     } 
 }
@@ -183,9 +183,11 @@ void IOManager::handle_GET_request(stringstream& line_stream){
     else if(command == SEE_POST_COMMAND)
         handle_see_post(line_stream);
 
-    else if(command == SEE_NOTIFICATIONS_COMMAND){
+    else if(command == SEE_NOTIFICATIONS_COMMAND)
         handle_see_notifications();
-    }
+
+    else if(command == SEE_ENROLLED_COURSES_COMMAND)
+        handle_see_enrolled_courses();
 
     //Other commands will be added later.
 
@@ -203,6 +205,9 @@ void IOManager::handle_DELETE_request(stringstream& line_stream){
 
     if(command == REMOVE_POST_COMMAND)
         handle_remove_post_by_id(line_stream);
+    
+    else if(command == REMOVE_ENROLLED_COURSE_COMMAND)
+        handle_remove_enrolled_course(line_stream);
 
 
 
@@ -213,7 +218,17 @@ void IOManager::handle_DELETE_request(stringstream& line_stream){
 }
 
 void IOManager::handle_PUT_request(stringstream& line_stream){
+    string command, sign;
+    line_stream >> command >> sign;
 
+    if(sign != QUESTION_MARK)
+        throw runtime_error(BAD_REQUEST_RESPONSE);
+
+    if(command == COURSE_ENROLLMENT_COMMAND)
+        handle_course_enroll(line_stream);
+
+    else
+        throw runtime_error(NOT_FOUND_RESPONSE);
 }
 
 
@@ -415,7 +430,7 @@ void IOManager::handle_see_post(stringstream& arguments){
     arguments >> parameter1 >> value1 >> parameter2 >> value2; 
     vector<string> output;
 
-    if(!is_natural(value1) or !is_natural(value2)){
+    if(!is_arithmetic(value1) or !is_arithmetic(value2)){
         throw runtime_error(BAD_REQUEST_RESPONSE);
     }
 
@@ -445,6 +460,14 @@ void IOManager::handle_see_notifications(){
     }
 }
 
+void IOManager::handle_see_enrolled_courses(){
+    vector<string> output;
+    utms -> write_enrolled_courses(output);
+
+    for(string response : output){
+        cout << response;
+    }
+}
 
 
 void IOManager::handle_remove_post_by_id(stringstream& arguments){
@@ -464,4 +487,44 @@ void IOManager::handle_remove_post_by_id(stringstream& arguments){
     }
 
     cout << SUCCESS_RESPONSE << endl;
+}
+
+void IOManager::handle_remove_enrolled_course(stringstream& arguments){
+    string parameter1, value1;
+    arguments >> parameter1 >> value1;
+
+    if(parameter1 == ID_PARAMETER){
+        if(!is_natural(value1)){
+            throw runtime_error(BAD_REQUEST_RESPONSE);
+        }
+
+        utms->remove_enrolled_course(stoi(value1));
+    }
+
+    else{
+        throw runtime_error(BAD_REQUEST_RESPONSE);
+    }
+
+    cout << SUCCESS_RESPONSE << endl;
+}
+
+void IOManager::handle_course_enroll(stringstream& arguments){
+    string parameter1, value1;
+    arguments >> parameter1 >> value1;
+
+    if(parameter1 == ID_PARAMETER){
+        if(!is_natural(value1)){
+            throw runtime_error(BAD_REQUEST_RESPONSE);
+        }
+
+        utms->enroll_course(stoi(value1));
+    }
+
+    else{
+        throw runtime_error(BAD_REQUEST_RESPONSE);
+    }
+
+    cout << SUCCESS_RESPONSE << endl;
+
+    
 }

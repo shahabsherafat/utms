@@ -5,6 +5,20 @@ SocialMedia::SocialMedia(){
     users.push_back(admin);
 }
 
+SocialMedia::~SocialMedia(){
+    for(User* u : users){
+        delete(u);
+    }
+
+    for(Course* c : courses){
+        delete(c);
+    }
+
+    for(OfferedCourse* o : offered_courses){
+        delete(o);
+    }
+}
+
 void SocialMedia::add_course(int id, string name, int credit, int prerequisite, vector<int> major_ids){
     Course* new_course = new Course(id, name, credit, prerequisite, major_ids);
     courses.push_back(new_course);
@@ -50,6 +64,16 @@ Course* SocialMedia::find_course_by_id(int id){
     for(Course* c : courses){
         if(c->get_id() == id){
             return c;
+        }
+    }
+
+    throw runtime_error(NOT_FOUND_RESPONSE);
+}
+
+OfferedCourse* SocialMedia::find_offered_course_by_id(int id){
+    for(OfferedCourse* o : offered_courses){
+        if(o->get_id() == id){
+            return o;
         }
     }
 
@@ -151,7 +175,24 @@ void SocialMedia::write_post_by_id(int user_id, int post_id, vector<string>& out
 }
 
 void SocialMedia::write_notifications(vector<string>& output){
+    if(!is_logged_in){
+        throw runtime_error(PERMISSION_DENIED_RESPONSE);
+    }
+
     logged_in_user -> write_notifications(output);
+}
+
+void SocialMedia::write_enrolled_courses(vector<string>& output){
+    if(!is_logged_in){
+        throw runtime_error(PERMISSION_DENIED_RESPONSE);
+    }
+
+    if(!dynamic_cast<Student*>(logged_in_user)){
+        throw runtime_error(PERMISSION_DENIED_RESPONSE);
+    }
+
+    Student* student = (Student*) logged_in_user;
+    student -> write_enrolled_courses(output);
 }
 
 Time SocialMedia::make_time_by_string(string time_string){
@@ -178,6 +219,10 @@ Date SocialMedia::make_date_by_string(string date_string){
 
 void SocialMedia::offer_new_course(int course_id, int professor_id, int capacity, string time,
                       string date, int class_number){
+    if(!is_logged_in){
+        throw runtime_error(PERMISSION_DENIED_RESPONSE);
+    }
+
     if(!dynamic_cast<Admin*>(logged_in_user)){
         throw runtime_error(PERMISSION_DENIED_RESPONSE);
     }
@@ -189,17 +234,25 @@ void SocialMedia::offer_new_course(int course_id, int professor_id, int capacity
     }
     
     Professor* professor = (Professor*) unknown_user;
-    if(!course -> can_take_this_course(professor -> get_major_id())){
+    if(!course -> can_professor_take_this_course(professor -> get_major_id())){
         throw runtime_error(PERMISSION_DENIED_RESPONSE);
     }
     
-    Time course_time = make_time_by_string(time);
-    professor -> add_working_time(course_time);
+    Time holding_time = make_time_by_string(time);
     Date exam_date = make_date_by_string(date);
 
+    OfferedCourse* new_offered_course = new OfferedCourse(last_offered_course_id, course -> get_name(), course ->get_id(),
+    capacity, class_number, professor -> get_name(), holding_time, exam_date);
+
+    try{
+        professor -> add_offered_course(new_offered_course);
+    }
+    catch(runtime_error& r){
+        delete new_offered_course;
+        throw;
+    }
+
     last_offered_course_id ++;
-    OfferedCourse* new_offered_course = new OfferedCourse(last_offered_course_id, course -> get_name(), capacity,
-    class_number, professor -> get_name(), course_time, exam_date);
     offered_courses.push_back(new_offered_course);
 
     notif n;
@@ -210,8 +263,48 @@ void SocialMedia::offer_new_course(int course_id, int professor_id, int capacity
     notify_every_one(n);
 }
 
-
-
 void SocialMedia::remove_post(int id){
-    logged_in_user->remove_post(id);
+    if(!is_logged_in){
+        throw runtime_error(PERMISSION_DENIED_RESPONSE);
+    }
+
+    logged_in_user -> remove_post(id);
+}
+
+void SocialMedia::remove_enrolled_course(int id){
+    if(!is_logged_in){
+        throw runtime_error(PERMISSION_DENIED_RESPONSE);
+    }
+
+    if(!dynamic_cast<Student*>(logged_in_user)){
+        throw runtime_error(PERMISSION_DENIED_RESPONSE);
+    }
+
+    Student* student = (Student*) logged_in_user;
+    OfferedCourse* offered_course = find_offered_course_by_id(id);
+    student -> remove_enrolled_course(offered_course);
+}
+
+void SocialMedia::enroll_course(int id){
+    if(!is_logged_in){
+        throw runtime_error(PERMISSION_DENIED_RESPONSE);
+    }
+
+    if(!dynamic_cast<Student*>(logged_in_user)){
+        throw runtime_error(PERMISSION_DENIED_RESPONSE);
+    }
+    Student* student = (Student*) logged_in_user;
+
+    OfferedCourse* desired_offered_course = find_offered_course_by_id(id);
+    Course* desired_course = find_course_by_id(desired_offered_course -> get_course_id());
+    
+    if(!desired_course -> can_student_take_this_course(student -> get_major_id(), student -> get_semester())){
+        throw runtime_error(PERMISSION_DENIED_RESPONSE);
+    }
+
+    if(!desired_course -> can_student_take_this_course(student -> get_major_id(), student -> get_semester())){
+        throw runtime_error(PERMISSION_DENIED_RESPONSE);
+    }
+
+    student -> add_attended_course(desired_offered_course);
 }

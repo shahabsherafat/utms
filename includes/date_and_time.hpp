@@ -23,6 +23,7 @@ class Date{
     public:
         Date(int y, int m, int d) : year(y), month(m), day(d){}
         string get_date_string(){return to_string(year) + SLASH + to_string(month) + SLASH + to_string(day);}
+        bool intersects(Date d);
         // int get_year(){return year;}
         // int get_month(){return month;}
         // int get_day(){return day;}

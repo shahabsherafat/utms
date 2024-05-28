@@ -8,9 +8,10 @@ int main(int argc, char* addresses[5]){
     io->read_users(addresses[2], addresses[4]);
     io->read_courses(addresses[3]);
 
-    io->run_command_line(); 
+    io->run_command_line();
     
-    // utms->test_print();
+    delete(utms);
+    delete(io);
     
     return 0;
 }

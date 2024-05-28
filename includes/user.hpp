@@ -18,6 +18,7 @@ class User{
         vector<notif> notifications;
     public:
         User(int init_id, string init_password, string init_name);
+        ~User();
         int get_id();
         bool is_authenticated(string entered_password);
         void add_post(string title, string message);

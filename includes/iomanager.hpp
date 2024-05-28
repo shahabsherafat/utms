@@ -5,8 +5,6 @@
 class IOManager{
     private:
         SocialMedia* utms;
-
-
     public:
         IOManager(SocialMedia* social_media);
         void read_majors(string majors_file_address);
@@ -30,9 +28,14 @@ class IOManager{
         void handle_see_personal_page(stringstream& arguments);
         void handle_see_post(stringstream& arguments);
         void handle_see_notifications();
-
+        void handle_see_enrolled_courses();
 
         void handle_remove_post_by_id(stringstream& arguments);
+        void handle_remove_enrolled_course(stringstream& arguments);
+
+        void handle_course_enroll(stringstream& arguments);
+        
+
 
 
 
