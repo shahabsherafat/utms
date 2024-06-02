@@ -1,6 +1,5 @@
 #pragma once
 #include "consts.hpp"
-
 class Major{
     private:
         int id;

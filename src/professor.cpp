@@ -45,7 +45,6 @@ void Professor::add_offered_course(OfferedCourse* o){
         if(of->get_holding_time().intersects(time)){
             throw runtime_error(PERMISSION_DENIED_RESPONSE);
         }
-    }
-    
+    }   
     offered_courses.push_back(o);
 }

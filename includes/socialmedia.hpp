@@ -36,10 +36,11 @@ class SocialMedia{
 
         void login(int id, string password);
         void logout();
-        void add_post(string title, string message);
+        void add_post(string title, string message, string image_address);
         void connect(int id);
         void offer_new_course(int course_id, int professor_id, int capacity, string time,
                               string date, int class_number);
+        void set_profile_photo(string photo_address);
 
         void write_all_offered_courses(vector<string>& output);
         void write_offered_course_by_id(int id, vector<string>& output);

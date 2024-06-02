@@ -20,9 +20,9 @@ bool User::is_authenticated(string entered_password){
     return entered_password == password;
 }
 
-void User::add_post(string title, string message){
+void User::add_post(string title, string message, string image_address){
     last_post_id ++;
-    Post* new_post = new Post(title, message, last_post_id);
+    Post* new_post = new Post(title, message, last_post_id, image_address);
     notif n;
     n.user_name = name;n.user_id = id;n.notif_message = NEW_POST_NOTIFICATION;
     notify_to_connected_users(n);
@@ -83,7 +83,6 @@ void User::write_post_by_id(int id, vector<string>& output){
             return;
         }
     }
-
     throw runtime_error(NOT_FOUND_RESPONSE);
 }
 
@@ -93,4 +92,8 @@ void User::write_page_info(vector<string>& output){
     for(int i = posts.size() - 1; i >= 0; i--){
         output.push_back(to_string(posts[i]->get_id()) + SPACE + posts[i]->get_title() + NEWLINE);
     }
+}
+
+void User::set_profile_photo(string photo_address){
+    profile_photo_address = photo_address;
 }

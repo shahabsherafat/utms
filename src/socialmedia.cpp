@@ -112,7 +112,7 @@ void SocialMedia::logout(){
     logged_in_user = NULL;
 }
 
-void SocialMedia::add_post(string title, string message){
+void SocialMedia::add_post(string title, string message, string image_address){
     if(!is_logged_in){
         throw runtime_error(PERMISSION_DENIED_RESPONSE);
     }
@@ -125,7 +125,7 @@ void SocialMedia::add_post(string title, string message){
         notify_every_one(n);
     }
 
-    logged_in_user->add_post(title, message);
+    logged_in_user->add_post(title, message, image_address);
 }
 
 void SocialMedia::connect(int id){
@@ -142,6 +142,13 @@ void SocialMedia::connect(int id){
     logged_in_user -> connect(connected_user);
 }
 
+void SocialMedia::set_profile_photo(string photo_address){
+    if(!is_logged_in){
+        throw runtime_error(PERMISSION_DENIED_RESPONSE);
+    }
+
+    logged_in_user->set_profile_photo(photo_address);
+}
 
 void SocialMedia::write_all_offered_courses(vector<string>& output){
     if(offered_courses.size() == 0){

@@ -7,11 +7,9 @@ int main(int argc, char* addresses[5]){
     io->read_majors(addresses[1]);
     io->read_users(addresses[2], addresses[4]);
     io->read_courses(addresses[3]);
-
     io->run_command_line();
     
     delete(utms);
     delete(io);
-    
     return 0;
 }

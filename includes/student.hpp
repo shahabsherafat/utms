@@ -1,5 +1,4 @@
 #pragma once
-
 #include "user.hpp"
 #include "offeredcourse.hpp"
 

@@ -1,10 +1,7 @@
 #pragma once
-
 #include <fstream>
 #include <sstream>
 #include <iostream>
-#include <cmath>
-#include <random>
 #include <string>
 #include <vector>
 #include <algorithm>
@@ -53,13 +50,14 @@ const string COURSE_OFFER_COMMAND = "course_offer";
 const string COURSE_ENROLLMENT_COMMAND = "my_courses";
 const string REMOVE_ENROLLED_COURSE_COMMAND = "my_courses";
 const string SEE_ENROLLED_COURSES_COMMAND = "my_courses";
+const string SET_PROFILE_COMMAND = "profile_photo";
 const int NUM_OF_COURSE_OFFER_ARGUMENTS = 6;
-
 
 const string ID_PARAMETER = "id";
 const string PASSWORD_PARAMETER = "password";
 const string TITLE_PARAMETER = "title";
 const string MESSAGE_PARAMETER = "message";
+const string POST_IMAGE_ADDRESS_PARAMETER = "image";
 const string POST_ID_PARAMETER = "post_id";
 const string COURSE_ID_PARAMETER = "course_id";
 const string PROFESSOR_ID_PARAMETER = "professor_id";
@@ -67,6 +65,7 @@ const string CAPACITY_PARAMETER = "capacity";
 const string CLASS_NUMBER_PARAMETER = "class_number";
 const string TIME_PARAMETER = "time";
 const string EXAM_DATE_PARAMETER = "exam_date";
+const string PROFILE_PHOTO_PARAMETER = "photo";
 
 const string NEW_POST_NOTIFICATION = "New Post";
 const string NEW_OFFERED_COURSE_NOTIFICATION = "New Course Offering";

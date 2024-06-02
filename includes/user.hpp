@@ -1,5 +1,4 @@
 #pragma once
-
 #include "consts.hpp"
 #include "post.hpp"
 #include "notification.hpp"
@@ -10,10 +9,9 @@ class User{
         int id;
         string password;
         string name;
-
+        string profile_photo_address;
         int last_post_id = 0;
         vector<Post*> posts;
-
         vector<User*> connected_users;
         vector<notif> notifications;
     public:
@@ -21,7 +19,7 @@ class User{
         ~User();
         int get_id();
         bool is_authenticated(string entered_password);
-        void add_post(string title, string message);
+        void add_post(string title, string message, string image_address);
         void remove_post(int id);
         virtual string get_personal_info_string() = 0;
         void write_page_info(vector<string>& output);
@@ -30,5 +28,5 @@ class User{
         void connect(User* connected);
         void add_notification(notif n);
         void notify_to_connected_users(notif n);
-
+        void set_profile_photo(string photo_address);
 };

@@ -44,6 +44,27 @@ int IOManager::find_index(const vector<string>& parameters, string parameter){
     } 
 }
 
+string IOManager::get_qouted_text(stringstream& arguments){
+    string source_string = arguments.str(), result_text;
+    int index = source_string.find(DOUBLE_QUOTATION);
+
+    if(index == -1){
+        throw runtime_error(BAD_REQUEST_RESPONSE);
+    }
+
+    source_string.erase(0, index+1);
+    index = source_string.find(DOUBLE_QUOTATION);
+
+    if(index == -1){
+        throw runtime_error(BAD_REQUEST_RESPONSE);
+    }
+
+    result_text = source_string.substr(0, index);
+    source_string.erase(0, index+1);
+    arguments.str(source_string);
+    return result_text;
+}
+
 void IOManager::read_courses(string courses_file_address){
     string line;
     ifstream file(courses_file_address);
@@ -163,11 +184,11 @@ void IOManager::handle_POST_request(stringstream& line_stream){
     else if(command == COURSE_OFFER_COMMAND)
         handle_course_offer(line_stream);
 
-    //Other commands will be added later.
+    else if(command == SET_PROFILE_COMMAND)
+        handle_set_profile_photo(line_stream);
 
     else
         throw runtime_error(NOT_FOUND_RESPONSE);
-    
 }
 
 void IOManager::handle_GET_request(stringstream& line_stream){
@@ -189,11 +210,8 @@ void IOManager::handle_GET_request(stringstream& line_stream){
     else if(command == SEE_ENROLLED_COURSES_COMMAND)
         handle_see_enrolled_courses();
 
-    //Other commands will be added later.
-
     else
         throw runtime_error(NOT_FOUND_RESPONSE);
-    
 }
 
 void IOManager::handle_DELETE_request(stringstream& line_stream){
@@ -208,10 +226,6 @@ void IOManager::handle_DELETE_request(stringstream& line_stream){
     
     else if(command == REMOVE_ENROLLED_COURSE_COMMAND)
         handle_remove_enrolled_course(line_stream);
-
-
-
-    //Other commands will be added later.
 
     else
         throw runtime_error(NOT_FOUND_RESPONSE);
@@ -230,8 +244,6 @@ void IOManager::handle_PUT_request(stringstream& line_stream){
     else
         throw runtime_error(NOT_FOUND_RESPONSE);
 }
-
-
 
 void IOManager::handle_login(stringstream& arguments){
     string parameter1, value1, parameter2, value2;
@@ -265,55 +277,33 @@ void IOManager::handle_logout(){
     cout << SUCCESS_RESPONSE << endl;
 }
 
+void IOManager::assign_post_factors(stringstream& arguments, string& title, string& message, string& image_address){
+    string parameter, source_string = arguments.str();
+    arguments >> parameter;
+
+    if(parameter != EMPTY_STRING){
+        if(parameter == POST_IMAGE_ADDRESS_PARAMETER){
+            arguments >> image_address;
+
+            if(image_address == EMPTY_STRING)
+                throw runtime_error(BAD_REQUEST_RESPONSE);
+        }
+
+        else if(parameter == TITLE_PARAMETER)
+            title = get_qouted_text(arguments);
+
+        else if(parameter == MESSAGE_PARAMETER)
+            message = get_qouted_text(arguments);
+
+        else 
+            throw runtime_error(BAD_REQUEST_RESPONSE);
+    }
+}
+
 void IOManager::handle_add_post(stringstream& arguments){
-    string parameter1, value1, parameter2, value2, temp = arguments.str();
-    int index;
-    arguments >> parameter1;
-    index = temp.find(DOUBLE_QUOTATION);
-
-    if(index == -1){
-        throw runtime_error(BAD_REQUEST_RESPONSE);
-    }
-
-    temp.erase(0, index+1);
-    index = temp.find(DOUBLE_QUOTATION);
-
-    if(index == -1){
-        throw runtime_error(BAD_REQUEST_RESPONSE);
-    }
-
-    value1 = temp.substr(0, index);
-    temp.erase(0, index+1);
-    arguments.str(temp);
-
-    arguments >> parameter2;
-    index = temp.find(DOUBLE_QUOTATION);
-
-    if(index == -1){
-        throw runtime_error(BAD_REQUEST_RESPONSE);
-    }
-
-    temp.erase(0, index+1);
-    index = temp.find(DOUBLE_QUOTATION);
-
-    if(index == -1){
-        throw runtime_error(BAD_REQUEST_RESPONSE);
-    }
-
-    value2 = temp.substr(0, index);
-
-    if(parameter1 == TITLE_PARAMETER and parameter2 == MESSAGE_PARAMETER){
-        utms->add_post(DOUBLE_QUOTATION + value1 + DOUBLE_QUOTATION, DOUBLE_QUOTATION + value2 + DOUBLE_QUOTATION);
-    }
-
-    else if(parameter1 == MESSAGE_PARAMETER and parameter2 == TITLE_PARAMETER){
-        utms->add_post(DOUBLE_QUOTATION + value2 + DOUBLE_QUOTATION, DOUBLE_QUOTATION + value1 + DOUBLE_QUOTATION);
-    }
-
-    else{
-        throw runtime_error(BAD_REQUEST_RESPONSE);
-    }
-
+    string title, message, image_address;
+    assign_post_factors(arguments, title, message, image_address);
+    utms->add_post(title, message, image_address);
     cout << SUCCESS_RESPONSE << endl;
 }
 
@@ -339,7 +329,6 @@ void IOManager::handle_connect(stringstream& arguments){
 
 void IOManager::handle_course_offer(stringstream& arguments){
     vector<string> parameters(NUM_OF_COURSE_OFFER_ARGUMENTS), values(NUM_OF_COURSE_OFFER_ARGUMENTS);
-
     int course_id, professor_id, capacity, class_number;
     string time, exam_date, temp;
 
@@ -374,12 +363,24 @@ void IOManager::handle_course_offer(stringstream& arguments){
 
     time = values[find_index(parameters, TIME_PARAMETER)];
     exam_date = values[find_index(parameters, EXAM_DATE_PARAMETER)];
-
     utms -> offer_new_course(course_id, professor_id, capacity, time, exam_date, class_number);
     cout << SUCCESS_RESPONSE << endl;
 }
 
+void IOManager::handle_set_profile_photo(stringstream& arguments){
+    string parameter1, value1;
+    arguments >> parameter1 >> value1;
 
+    if(parameter1 == PROFILE_PHOTO_PARAMETER){
+        utms -> set_profile_photo(value1);
+    }
+
+    else{
+        throw runtime_error(BAD_REQUEST_RESPONSE);
+    }
+
+    cout << SUCCESS_RESPONSE << endl;
+}
 
 void IOManager::handle_see_courses(stringstream& arguments){
     string parameter1, value1;
@@ -469,7 +470,6 @@ void IOManager::handle_see_enrolled_courses(){
     }
 }
 
-
 void IOManager::handle_remove_post_by_id(stringstream& arguments){
     string parameter1, value1;
     arguments >> parameter1 >> value1;
@@ -485,7 +485,6 @@ void IOManager::handle_remove_post_by_id(stringstream& arguments){
     else{
         throw runtime_error(BAD_REQUEST_RESPONSE);
     }
-
     cout << SUCCESS_RESPONSE << endl;
 }
 
@@ -525,6 +524,4 @@ void IOManager::handle_course_enroll(stringstream& arguments){
     }
 
     cout << SUCCESS_RESPONSE << endl;
-
-    
 }
