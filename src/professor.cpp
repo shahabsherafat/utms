@@ -48,3 +48,35 @@ void Professor::add_offered_course(OfferedCourse* o){
     }   
     offered_courses.push_back(o);
 }
+
+void Professor::add_course_post_if_you_can(OfferedCourse* target_course, string title,
+                                           string message, string image_address){
+    if(find(offered_courses.begin(), offered_courses.end(), target_course) == offered_courses.end())
+        throw runtime_error(PERMISSION_DENIED_RESPONSE);
+
+    Post* new_post = new Post(title, message, target_course->get_last_channel_post_id(), image_address);
+    target_course->add_post_to_channel(name, new_post);
+}
+
+bool Professor::is_participating_in_this_course(int course_id){
+    for(OfferedCourse* of : offered_courses){
+        if(of->get_id() == course_id){
+            return true;
+        }
+    }
+
+    return false;
+}
+
+void Professor::add_ta_form_if_you_can(OfferedCourse* target_course, string message){
+    if(find(offered_courses.begin(), offered_courses.end(), target_course) == offered_courses.end())
+        throw runtime_error(PERMISSION_DENIED_RESPONSE);
+    
+    last_post_id ++;
+    TAForm* new_ta_form = new TAForm(message, last_post_id, target_course);
+    media.push_back(new_ta_form);
+
+    notif n; n.user_id = id; n.user_name = name; n.notif_message = NEW_FORM_NOTIFICATION;
+    for(User* cu : connected_users)
+        cu->add_notification(n);
+}

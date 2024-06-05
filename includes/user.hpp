@@ -1,8 +1,10 @@
 #pragma once
 #include "consts.hpp"
 #include "post.hpp"
+#include "taform.hpp"
 #include "notification.hpp"
 #include "date_and_time.hpp"
+#include "offeredcourse.hpp"
 
 class User{
     protected:
@@ -11,7 +13,7 @@ class User{
         string name;
         string profile_photo_address;
         int last_post_id = 0;
-        vector<Post*> posts;
+        vector<Medium*> media;
         vector<User*> connected_users;
         vector<notif> notifications;
     public:
@@ -29,4 +31,7 @@ class User{
         void add_notification(notif n);
         void notify_to_connected_users(notif n);
         void set_profile_photo(string photo_address);
+        virtual void add_course_post_if_you_can(OfferedCourse* target_course, string title
+                                                , string message, string image_address) = 0;
+        virtual bool is_participating_in_this_course(int course_id) = 0;
 };

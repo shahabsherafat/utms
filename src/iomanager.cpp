@@ -46,23 +46,23 @@ int IOManager::find_index(const vector<string>& parameters, string parameter){
 
 string IOManager::get_qouted_text(stringstream& arguments){
     string source_string = arguments.str(), result_text;
-    int index = source_string.find(DOUBLE_QUOTATION);
+    int index = source_string.find(DOUBLE_QOUTATION);
 
     if(index == -1){
         throw runtime_error(BAD_REQUEST_RESPONSE);
     }
 
-    source_string.erase(0, index+1);
-    index = source_string.find(DOUBLE_QUOTATION);
+    source_string.erase(0, index + 1);
+    index = source_string.find(DOUBLE_QOUTATION);
 
     if(index == -1){
         throw runtime_error(BAD_REQUEST_RESPONSE);
     }
 
     result_text = source_string.substr(0, index);
-    source_string.erase(0, index+1);
+    source_string.erase(0, index + 1);
     arguments.str(source_string);
-    return result_text;
+    return DOUBLE_QOUTATION + result_text + DOUBLE_QOUTATION;
 }
 
 void IOManager::read_courses(string courses_file_address){
@@ -187,6 +187,12 @@ void IOManager::handle_POST_request(stringstream& line_stream){
     else if(command == SET_PROFILE_COMMAND)
         handle_set_profile_photo(line_stream);
 
+    else if(command == COURSE_POST_COMMAND)
+        handle_course_post(line_stream);
+
+    else if(command == ADD_TA_FORM_COMMAND)
+        handle_add_ta_form(line_stream);
+
     else
         throw runtime_error(NOT_FOUND_RESPONSE);
 }
@@ -209,6 +215,12 @@ void IOManager::handle_GET_request(stringstream& line_stream){
 
     else if(command == SEE_ENROLLED_COURSES_COMMAND)
         handle_see_enrolled_courses();
+
+    else if(command == SEE_COURSE_CHANNEL_COMMAND)
+        handle_see_course_channel(line_stream);
+
+    else if(command == SEE_COURSE_POST_COMMAND)
+        handle_see_course_post(line_stream);
 
     else
         throw runtime_error(NOT_FOUND_RESPONSE);
@@ -277,8 +289,8 @@ void IOManager::handle_logout(){
     cout << SUCCESS_RESPONSE << endl;
 }
 
-void IOManager::assign_post_factors(stringstream& arguments, string& title, string& message, string& image_address){
-    string parameter, source_string = arguments.str();
+void IOManager::assign_add_post_factors(stringstream& arguments, string& title, string& message, string& image_address){
+    string parameter;
     arguments >> parameter;
 
     if(parameter != EMPTY_STRING){
@@ -302,7 +314,13 @@ void IOManager::assign_post_factors(stringstream& arguments, string& title, stri
 
 void IOManager::handle_add_post(stringstream& arguments){
     string title, message, image_address;
-    assign_post_factors(arguments, title, message, image_address);
+
+    for(int i = 0; i < NUM_OF_ADD_POST_ARGUMENTS; i++)
+        assign_add_post_factors(arguments, title, message, image_address);
+    
+    if(title == EMPTY_STRING or message == EMPTY_STRING)
+        throw runtime_error(BAD_REQUEST_RESPONSE);
+
     utms->add_post(title, message, image_address);
     cout << SUCCESS_RESPONSE << endl;
 }
@@ -379,6 +397,85 @@ void IOManager::handle_set_profile_photo(stringstream& arguments){
         throw runtime_error(BAD_REQUEST_RESPONSE);
     }
 
+    cout << SUCCESS_RESPONSE << endl;
+}
+
+void IOManager::assign_add_course_post_factors(stringstream& arguments, int& id, string& title,
+                                               string& message, string& image_address){
+    string parameter, temp;
+    arguments >> parameter;
+
+    if(parameter != EMPTY_STRING){
+        if(parameter == POST_IMAGE_ADDRESS_PARAMETER){
+            arguments >> image_address;
+
+            if(image_address == EMPTY_STRING)
+                throw runtime_error(BAD_REQUEST_RESPONSE);
+        }
+
+        else if(parameter == ID_PARAMETER){
+            arguments >> temp;
+            if(!is_natural(temp)){
+                throw runtime_error(BAD_REQUEST_RESPONSE);
+            }
+            id = stoi(temp);
+        }
+
+        else if(parameter == TITLE_PARAMETER)
+            title = get_qouted_text(arguments);
+
+        else if(parameter == MESSAGE_PARAMETER)
+            message = get_qouted_text(arguments);
+
+        else 
+            throw runtime_error(BAD_REQUEST_RESPONSE);
+    }
+}
+
+void IOManager::handle_course_post(stringstream& arguments){
+    int id = EMPTY_INT;
+    string title, message, image_address;
+
+    for(int i = 0; i < NUM_OF_ADD_COURSE_POST_ARGUMENTS; i++)
+        assign_add_course_post_factors(arguments, id, title, message, image_address);
+
+    if(id == EMPTY_INT or title == EMPTY_STRING or message == EMPTY_STRING)
+        throw runtime_error(BAD_REQUEST_RESPONSE);
+    
+    utms->add_course_post(id, title, message, image_address);
+    cout << SUCCESS_RESPONSE << endl;
+}
+
+void IOManager::assign_add_ta_form_factors(stringstream& arguments, int& course_id, string& message){
+    string parameter, temp;
+    arguments >> parameter;
+
+    if(parameter != EMPTY_STRING){
+        if(parameter == MESSAGE_PARAMETER){
+            message = get_qouted_text(arguments);
+        }
+
+        else if(parameter == COURSE_ID_PARAMETER){
+            arguments >> temp;
+            if(!is_natural(temp)){
+                throw runtime_error(BAD_REQUEST_RESPONSE);
+            }
+            course_id = stoi(temp);
+        }
+
+        else 
+            throw runtime_error(BAD_REQUEST_RESPONSE);
+    }
+}
+
+void IOManager::handle_add_ta_form(stringstream& arguments){
+    int course_id;
+    string message;
+
+    for(int i = 0; i < NUM_OF_ADD_TA_FORM_ARGUMENTS; i++)
+        assign_add_ta_form_factors(arguments, course_id, message);
+
+    utms->add_ta_form(course_id, message);
     cout << SUCCESS_RESPONSE << endl;
 }
 
@@ -464,6 +561,54 @@ void IOManager::handle_see_notifications(){
 void IOManager::handle_see_enrolled_courses(){
     vector<string> output;
     utms -> write_enrolled_courses(output);
+
+    for(string response : output){
+        cout << response;
+    }
+}
+
+void IOManager::handle_see_course_channel(stringstream& arguments){
+    string parameter1, value1;
+    arguments >> parameter1 >> value1;
+    vector<string> output;
+
+    if(parameter1 == ID_PARAMETER){
+        if(!is_natural(value1)){
+            throw runtime_error(BAD_REQUEST_RESPONSE);
+        }
+
+        utms->write_course_channel(stoi(value1), output);
+    }
+
+    else{
+        throw runtime_error(BAD_REQUEST_RESPONSE);
+    }
+
+    for(string response : output){
+        cout << response;
+    }
+}
+
+void IOManager::handle_see_course_post(stringstream& arguments){
+    string parameter1, value1, parameter2, value2;
+    arguments >> parameter1 >> value1 >> parameter2 >> value2;
+    vector<string> output;
+
+    if(!is_natural(value1) or !is_natural(value2)){
+        throw runtime_error(BAD_REQUEST_RESPONSE);
+    }
+    
+    if(parameter1 == ID_PARAMETER and parameter2 == POST_ID_PARAMETER){
+        utms->write_course_post(stoi(value1), stoi(value2), output);
+    }
+
+    else if(parameter1 == POST_ID_PARAMETER and parameter2 == ID_PARAMETER){
+        utms->write_course_post(stoi(value2), stoi(value1), output);
+    }
+
+    else{
+        throw runtime_error(BAD_REQUEST_RESPONSE);
+    }
 
     for(string response : output){
         cout << response;

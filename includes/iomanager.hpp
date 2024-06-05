@@ -19,17 +19,24 @@ class IOManager{
 
         void handle_login(stringstream& arguments);
         void handle_logout();
-        void assign_post_factors(stringstream& arguments, string& title, string& message, string& image_address);
+        void assign_add_post_factors(stringstream& arguments, string& title, string& message, string& image_address);
         void handle_add_post(stringstream& arguments);
         void handle_connect(stringstream& arguments);
         void handle_course_offer(stringstream& arguments);
         void handle_set_profile_photo(stringstream& arguments);
+        void assign_add_course_post_factors(stringstream& arguments, int& id, string& title,
+                                            string& message, string& image_address);
+        void handle_course_post(stringstream& arguments);
+        void assign_add_ta_form_factors(stringstream& arguments, int& course_id, string& message);
+        void handle_add_ta_form(stringstream& arguments);
 
         void handle_see_courses(stringstream& arguments);
         void handle_see_personal_page(stringstream& arguments);
         void handle_see_post(stringstream& arguments);
         void handle_see_notifications();
         void handle_see_enrolled_courses();
+        void handle_see_course_channel(stringstream& arguments);
+        void handle_see_course_post(stringstream& arguments);
 
         void handle_remove_post_by_id(stringstream& arguments);
         void handle_remove_enrolled_course(stringstream& arguments);

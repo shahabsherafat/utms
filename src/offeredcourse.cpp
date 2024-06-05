@@ -33,3 +33,26 @@ Time OfferedCourse::get_holding_time(){
 Date OfferedCourse::get_exam_date(){
     return exam_date;
 }
+
+int OfferedCourse::get_last_channel_post_id(){
+    return last_channel_post_id;
+}
+
+void OfferedCourse::add_post_to_channel(string author_name, Post* new_post){
+    channel.push_back(make_pair(author_name, new_post));
+    last_channel_post_id ++;
+}
+
+void OfferedCourse::write_channel(vector<string>& output){
+    for(int i = channel.size() - 1; i >= 0; i--){
+        output.push_back(to_string(channel[i].second->get_id()) + 
+                         SPACE + channel[i].first + SPACE + channel[i].second->get_title() + NEWLINE);
+    }
+}
+
+void OfferedCourse::write_post(int post_id, vector<string>& output){
+    string author_name = channel[post_id - 1].first;
+    Post* target_post = channel[post_id - 1].second;
+    output.push_back(to_string(post_id) + SPACE + author_name + SPACE + target_post->get_title() +
+                     SPACE + target_post->get_message() + NEWLINE);
+}

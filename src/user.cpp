@@ -7,7 +7,7 @@ User::User(int init_id, string init_password, string init_name){
 }
 
 User::~User(){
-    for(Post* p : posts){
+    for(Medium* p : media){
         delete p;
     }
 }
@@ -26,14 +26,14 @@ void User::add_post(string title, string message, string image_address){
     notif n;
     n.user_name = name;n.user_id = id;n.notif_message = NEW_POST_NOTIFICATION;
     notify_to_connected_users(n);
-    posts.push_back(new_post);
+    media.push_back(new_post);
 }
 
 void User::remove_post(int id){
-    for(Post* p : posts){
-        if(p->get_id() == id){
-            posts.erase(remove(posts.begin(), posts.end(), p), posts.end());
-            delete (p);
+    for(Medium* m : media){
+        if(m->get_id() == id){
+            media.erase(remove(media.begin(), media.end(), m), media.end());
+            delete (m);
             return;
         }
     }
@@ -74,12 +74,26 @@ void User::write_notifications(vector<string>& output){
     notifications.clear();
 }
 
-void User::write_post_by_id(int id, vector<string>& output){
+void User::write_post_by_id(int post_id, vector<string>& output){
     output.push_back(get_personal_info_string());
 
-    for(Post* p : posts){
-        if(p->get_id() == id){
-            output.push_back(to_string(id) + SPACE + p->get_title() + SPACE + p->get_message() + NEWLINE);
+    for(Medium* m : media){
+        if(m->get_id() == post_id){
+            if(dynamic_cast<Post*>(m)){
+                Post* post = (Post*)m;
+                output.push_back(to_string(post_id) + SPACE + post->get_title() + 
+                                 SPACE + post->get_message() + NEWLINE);
+            }
+            
+            else{
+                TAForm* ta_form = (TAForm*)m;
+                OfferedCourse* course = ta_form->get_course();
+                output.push_back(to_string(post_id) + SPACE + TA_FORM_FOR_TEXT + SPACE +
+                                 course->get_name() + SPACE + COURSE_WORD + NEWLINE);
+                course->write_detailed_info(output);
+                output.push_back(ta_form->get_message() + NEWLINE);
+            }
+            
             return;
         }
     }
@@ -89,8 +103,18 @@ void User::write_post_by_id(int id, vector<string>& output){
 void User::write_page_info(vector<string>& output){
     output.push_back(get_personal_info_string());
 
-    for(int i = posts.size() - 1; i >= 0; i--){
-        output.push_back(to_string(posts[i]->get_id()) + SPACE + posts[i]->get_title() + NEWLINE);
+    for(int i = media.size() - 1; i >= 0; i--){
+        if(dynamic_cast<Post*>(media[i])){
+            Post* post = (Post*)media[i];
+            output.push_back(to_string(post->get_id()) + SPACE + post->get_title() + NEWLINE);
+        }
+        
+        else{
+            TAForm* ta_form = (TAForm*)media[i];
+            OfferedCourse* course = ta_form->get_course();
+            output.push_back(to_string(id) + SPACE + TA_FORM_FOR_TEXT + SPACE +
+                                course->get_name() + SPACE + COURSE_WORD + NEWLINE);
+        }
     }
 }
 

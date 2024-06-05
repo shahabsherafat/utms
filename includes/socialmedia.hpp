@@ -41,6 +41,8 @@ class SocialMedia{
         void offer_new_course(int course_id, int professor_id, int capacity, string time,
                               string date, int class_number);
         void set_profile_photo(string photo_address);
+        void add_course_post(int course_id, string title, string message, string image_address);
+        void add_ta_form(int course_id, string message);
 
         void write_all_offered_courses(vector<string>& output);
         void write_offered_course_by_id(int id, vector<string>& output);
@@ -48,6 +50,8 @@ class SocialMedia{
         void write_post_by_id(int user_id, int post_id, vector<string>& output);
         void write_notifications(vector<string>& output);
         void write_enrolled_courses(vector<string>& output);
+        void write_course_channel(int course_id, vector<string>& output);
+        void write_course_post(int course_id, int post_id, vector<string>& output);
 
         void remove_post(int id);
         void remove_enrolled_course(int id);

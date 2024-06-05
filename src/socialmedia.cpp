@@ -150,6 +150,38 @@ void SocialMedia::set_profile_photo(string photo_address){
     logged_in_user->set_profile_photo(photo_address);
 }
 
+void SocialMedia::add_course_post(int course_id, string title, string message, string image_address){
+    if(!is_logged_in){
+        throw runtime_error(PERMISSION_DENIED_RESPONSE);
+    }
+
+    OfferedCourse* target_course = find_offered_course_by_id(course_id);
+    logged_in_user->add_course_post_if_you_can(target_course, title, message, image_address);
+
+    notif n;n.user_id = target_course->get_id();n.user_name = target_course->get_name();
+    n.notif_message = NEW_COURSE_POST_NOTIFICATION;
+
+    for(User* u : users){
+        if(u->is_participating_in_this_course(course_id) and u != logged_in_user){
+            u->add_notification(n);
+        }
+    }
+}
+
+void SocialMedia::add_ta_form(int course_id, string message){
+    if(!is_logged_in){
+        throw runtime_error(PERMISSION_DENIED_RESPONSE);
+    }
+
+    if(!dynamic_cast<Professor*>(logged_in_user)){
+        throw runtime_error(PERMISSION_DENIED_RESPONSE);
+    }
+
+    Professor* professor = (Professor*) logged_in_user;
+    OfferedCourse* target_course = find_offered_course_by_id(course_id);
+    professor->add_ta_form_if_you_can(target_course, message);
+}
+
 void SocialMedia::write_all_offered_courses(vector<string>& output){
     if(offered_courses.size() == 0){
         throw runtime_error(EMPTY_RESPONSE);
@@ -200,6 +232,36 @@ void SocialMedia::write_enrolled_courses(vector<string>& output){
 
     Student* student = (Student*) logged_in_user;
     student -> write_enrolled_courses(output);
+}
+
+void SocialMedia::write_course_channel(int course_id, vector<string>& output){
+    if(!is_logged_in){
+        throw runtime_error(PERMISSION_DENIED_RESPONSE);
+    }
+    
+    OfferedCourse* target_course = find_offered_course_by_id(course_id);
+
+    if(!logged_in_user->is_participating_in_this_course(course_id)){
+        throw runtime_error(PERMISSION_DENIED_RESPONSE);
+    }
+
+    target_course->write_detailed_info(output);
+    target_course->write_channel(output);
+}
+
+void SocialMedia::write_course_post(int course_id, int post_id, vector<string>& output){
+    if(!is_logged_in){
+        throw runtime_error(PERMISSION_DENIED_RESPONSE);
+    }
+    
+    OfferedCourse* target_course = find_offered_course_by_id(course_id);
+
+    if(!logged_in_user->is_participating_in_this_course(course_id)){
+        throw runtime_error(PERMISSION_DENIED_RESPONSE);
+    }
+
+    target_course->write_detailed_info(output);
+    target_course->write_post(post_id, output);
 }
 
 Time SocialMedia::make_time_by_string(string time_string){

@@ -78,3 +78,28 @@ void Student::remove_enrolled_course(OfferedCourse* o){
     notif n;n.user_id = id;n.user_name = name;n.notif_message = DELETED_COURSE_NOTIFICATION;
     notify_to_connected_users(n);
 }
+
+void Student::add_course_post_if_you_can(OfferedCourse* target_course, string title,
+                                         string message, string image_address){
+    if(find(assisting_courses.begin(), assisting_courses.end(), target_course) == assisting_courses.end())
+        throw runtime_error(PERMISSION_DENIED_RESPONSE);
+
+    Post* new_post = new Post(title, message, target_course->get_last_channel_post_id(), image_address);
+    target_course->add_post_to_channel(name, new_post);
+}
+
+bool Student::is_participating_in_this_course(int course_id){
+    for(OfferedCourse* at : attended_courses){
+        if(at->get_id() == course_id){
+            return true;
+        }
+    }
+
+    for(OfferedCourse* as : assisting_courses){
+        if(as->get_id() == course_id){
+            return true;
+        }
+    }
+
+    return false;
+}

@@ -9,6 +9,7 @@
 using namespace std;
 
 const string EMPTY_STRING = "";
+const int EMPTY_INT = 0;
 const string FIELD_SEPARATOR = "-";
 const char COMMA = ',';
 const char SEMICOLON = ';';
@@ -18,9 +19,10 @@ const char COLON = ':';
 const char DASH = '-';
 const char SLASH = '/';
 const string NEWLINE = "\n";
-const char DOUBLE_QUOTATION = '\"';
+const char DOUBLE_QOUTATION = '\"';
 
 const int STARTING_OFFERED_COURSES_ID = 1;
+const int STARTING_COURSE_POST_ID = 1;
 
 const int ADMIN_ID = 0;
 const string ADMIN_PASSWORD = "UT_account";
@@ -51,7 +53,14 @@ const string COURSE_ENROLLMENT_COMMAND = "my_courses";
 const string REMOVE_ENROLLED_COURSE_COMMAND = "my_courses";
 const string SEE_ENROLLED_COURSES_COMMAND = "my_courses";
 const string SET_PROFILE_COMMAND = "profile_photo";
+const string COURSE_POST_COMMAND = "course_post";
+const string SEE_COURSE_CHANNEL_COMMAND = "course_channel";
+const string SEE_COURSE_POST_COMMAND = "course_post";
+const string ADD_TA_FORM_COMMAND = "ta_form";
 const int NUM_OF_COURSE_OFFER_ARGUMENTS = 6;
+const int NUM_OF_ADD_POST_ARGUMENTS = 3;
+const int NUM_OF_ADD_COURSE_POST_ARGUMENTS = 4;
+const int NUM_OF_ADD_TA_FORM_ARGUMENTS = 2;
 
 const string ID_PARAMETER = "id";
 const string PASSWORD_PARAMETER = "password";
@@ -71,6 +80,9 @@ const string NEW_POST_NOTIFICATION = "New Post";
 const string NEW_OFFERED_COURSE_NOTIFICATION = "New Course Offering";
 const string GOTTEN_COURSE_NOTIFICATION = "Get Course";
 const string DELETED_COURSE_NOTIFICATION = "Delete Course";
+const string NEW_COURSE_POST_NOTIFICATION = "New Course Post";
+const string NEW_FORM_NOTIFICATION = "New Form";
 
-
+const string TA_FORM_FOR_TEXT = "TA form for";
+const string COURSE_WORD = "course";
 #define debug(x) cout << x << endl, exit(0);

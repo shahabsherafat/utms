@@ -1,15 +1,13 @@
-#include "consts.hpp"
+#pragma once
+#include "medium.hpp"
 
-class Post{
+class Post : public Medium{
     private:
-        int id;
         string title;
-        string message;
         string image_address;
         
     public:
         Post(string init_title, string init_message, int init_id, string init_image_address);
-        int get_id();
         string get_title();
-        string get_message();
+        // int get_id();
 };

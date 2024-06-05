@@ -1,6 +1,5 @@
 #pragma once
 #include "user.hpp"
-#include "offeredcourse.hpp"
 
 class Professor : public User{
     private:
@@ -16,5 +15,8 @@ class Professor : public User{
         int get_major_id();
         string get_name();
         void add_offered_course(OfferedCourse* o);
-        
+        void add_course_post_if_you_can(OfferedCourse* target_course, string title,
+                                        string message, string image_address);
+        bool is_participating_in_this_course(int course_id);
+        void add_ta_form_if_you_can(OfferedCourse* target_course, string message);
 };
