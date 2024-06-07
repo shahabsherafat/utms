@@ -112,8 +112,8 @@ void User::write_page_info(vector<string>& output){
         else{
             TAForm* ta_form = (TAForm*)media[i];
             OfferedCourse* course = ta_form->get_course();
-            output.push_back(to_string(id) + SPACE + TA_FORM_FOR_TEXT + SPACE +
-                                course->get_name() + SPACE + COURSE_WORD + NEWLINE);
+            output.push_back(to_string(ta_form->get_id()) + SPACE + TA_FORM_FOR_TEXT + SPACE +
+                             course->get_name() + SPACE + COURSE_WORD + NEWLINE);
         }
     }
 }

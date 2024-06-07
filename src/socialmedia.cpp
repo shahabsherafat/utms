@@ -56,7 +56,6 @@ User* SocialMedia::find_user_by_id(int id){
             return u;
         }
     }
-
     throw runtime_error(NOT_FOUND_RESPONSE);
 }
 
@@ -66,7 +65,7 @@ Course* SocialMedia::find_course_by_id(int id){
             return c;
         }
     }
-
+    
     throw runtime_error(NOT_FOUND_RESPONSE);
 }
 
@@ -78,6 +77,14 @@ OfferedCourse* SocialMedia::find_offered_course_by_id(int id){
     }
 
     throw runtime_error(NOT_FOUND_RESPONSE);
+}
+
+Student* SocialMedia::find_student_by_id(int student_id){
+    for(User* s : users){
+        if(s->get_id() == student_id){
+            return (Student*) s;
+        }
+    }
 }
 
 void SocialMedia::notify_every_one(notif n){
@@ -182,6 +189,51 @@ void SocialMedia::add_ta_form(int course_id, string message){
     professor->add_ta_form_if_you_can(target_course, message);
 }
 
+void SocialMedia::close_ta_form(int ta_form_id, vector<bool> results){
+    Professor* professor = (Professor*) logged_in_user;
+    TAForm* target_ta_form = professor->get_ta_form(ta_form_id);
+    vector<int> student_ids = target_ta_form->get_requesting_students_ids();
+    OfferedCourse* target_course = target_ta_form->get_course();
+    notif n; n.user_id = target_course->get_id(); n.user_name = target_course->get_name();
+
+    for(int i = 0; i < student_ids.size(); i++){
+        Student* target_student = find_student_by_id(student_ids[i]);
+
+        if(results[i]){
+            n.notif_message = ACCEPTED_TA_REQUEST_NOTIFICATION;
+            target_student->add_assisting_course(target_course);
+        }
+        else{
+            n.notif_message = REJECTED_TA_REQUEST_NOTIFICATION;
+        }
+
+        target_student->add_notification(n);
+    }
+}
+
+void SocialMedia::ta_request(int professor_id, int form_id){
+    if(!is_logged_in){
+        throw runtime_error(PERMISSION_DENIED_RESPONSE);
+    }
+
+    if(!dynamic_cast<Student*>(logged_in_user)){
+        throw runtime_error(PERMISSION_DENIED_RESPONSE);
+    }
+
+    User* target_user = find_user_by_id(professor_id);
+    if(!dynamic_cast<Professor*>(target_user)){
+        throw runtime_error(NOT_FOUND_RESPONSE);
+    }
+    Professor* professor = (Professor*)target_user;
+    TAForm* target_ta_form = professor->get_ta_form(form_id);
+    int min_semester = find_course_by_id(target_ta_form->get_course()->get_course_id()) -> get_min_semester();
+    if(((Student*)logged_in_user)->get_semester() <= min_semester){
+        throw runtime_error(PERMISSION_DENIED_RESPONSE);
+    }
+
+    target_ta_form->add_request(logged_in_user->get_id(), ((Student*)logged_in_user)->get_ta_request_text());
+}
+
 void SocialMedia::write_all_offered_courses(vector<string>& output){
     if(offered_courses.size() == 0){
         throw runtime_error(EMPTY_RESPONSE);
@@ -262,6 +314,19 @@ void SocialMedia::write_course_post(int course_id, int post_id, vector<string>& 
 
     target_course->write_detailed_info(output);
     target_course->write_post(post_id, output);
+}
+
+void SocialMedia::write_ta_form_requests(int ta_form_id, vector<string>& output){
+    if(!is_logged_in){
+        throw runtime_error(PERMISSION_DENIED_RESPONSE);
+    }
+
+    if(!dynamic_cast<Professor*>(logged_in_user)){
+        throw runtime_error(PERMISSION_DENIED_RESPONSE);
+    }
+
+    Professor* professor = (Professor*)logged_in_user;
+    professor->write_ta_form_requests_if_you_can(ta_form_id, output);
 }
 
 Time SocialMedia::make_time_by_string(string time_string){

@@ -5,3 +5,10 @@ POST login  ? id 810420500  password ramtung
 POST course_post ? id 1 title "ksjldfj" message "skldfsddf" image sdlkfj
 POST ta_form ? course_id  1 message "salam"
 GET post ? id 810420500 post_id 1 
+POST logout ? 
+POST login ? id 1 password 123
+POST ta_request ? professor_id 810420500 form_id 1
+POST logout ?
+POST login  ? id 810420500  password ramtung
+POST close_ta_form ? id 1
+GET personal_page ? id 810420500

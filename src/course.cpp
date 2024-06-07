@@ -36,5 +36,8 @@ bool Course::can_student_take_this_course(int major_id, int semester){
     else{
         return false;
     }
-    
+}
+
+int Course::get_min_semester(){
+    return prerequisite;
 }

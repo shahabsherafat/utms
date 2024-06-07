@@ -103,3 +103,11 @@ bool Student::is_participating_in_this_course(int course_id){
 
     return false;
 }
+
+void Student::add_assisting_course(OfferedCourse* assisting_course){
+    assisting_courses.push_back(assisting_course);
+}
+
+string Student::get_ta_request_text(){
+    return to_string(id) + SPACE + name + SPACE + to_string(semester);
+}

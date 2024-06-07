@@ -193,6 +193,12 @@ void IOManager::handle_POST_request(stringstream& line_stream){
     else if(command == ADD_TA_FORM_COMMAND)
         handle_add_ta_form(line_stream);
 
+    else if(command == CLOSE_TA_FORM_COMMAND)
+        handle_close_ta_form(line_stream);
+
+    else if(command == TA_REQUEST_COMMAND)
+        handle_ta_request(line_stream);
+
     else
         throw runtime_error(NOT_FOUND_RESPONSE);
 }
@@ -476,6 +482,73 @@ void IOManager::handle_add_ta_form(stringstream& arguments){
         assign_add_ta_form_factors(arguments, course_id, message);
 
     utms->add_ta_form(course_id, message);
+    cout << SUCCESS_RESPONSE << endl;
+}
+
+void IOManager::assign_results(vector<bool>& results, const vector<string>& output){
+    string result;
+    int i = 1;
+    
+    while(i < output.size()){
+        cout << output[i] + COLON + SPACE;
+        getline(cin, result);
+
+        if(result == ACCEPTED_RESULT){
+            results.push_back(true);
+            i++;
+        }
+        else if(result == REJECTED_RESULT){
+            results.push_back(false);
+            i++;
+        }
+        else
+            continue;
+    }
+}
+
+void IOManager::handle_close_ta_form(stringstream& arguments){
+    string parameter1, value1;
+    arguments >> parameter1 >> value1;
+    vector<string> output;
+    vector<bool> results;
+
+    if(parameter1 == ID_PARAMETER){
+        if(!is_natural(value1)){
+            throw runtime_error(BAD_REQUEST_RESPONSE);
+        }
+
+        utms->write_ta_form_requests(stoi(value1), output);
+    }
+
+    else{
+        throw runtime_error(BAD_REQUEST_RESPONSE);
+    }
+
+    cout << output[0];
+    assign_results(results, output);
+    utms -> close_ta_form(stoi(value1), results);
+}
+
+void IOManager::handle_ta_request(stringstream& arguments){
+    string parameter1, value1, parameter2, value2;
+    arguments >> parameter1 >> value1 >> parameter2 >> value2; 
+
+    if(!is_natural(value1) or !is_natural(value2)){
+        throw runtime_error(BAD_REQUEST_RESPONSE);
+    }
+
+    if(parameter1 == PROFESSOR_ID_PARAMETER and parameter2 == FORM_ID_PARAMETER){
+        utms->ta_request(stoi(value1), stoi(value2));
+    }
+
+    else if(parameter1 == FORM_ID_PARAMETER and parameter2 == PROFESSOR_ID_PARAMETER){
+        utms->ta_request(stoi(value2), stoi(value1));
+    }
+
+    else{
+        throw runtime_error(BAD_REQUEST_RESPONSE);
+    }
+
     cout << SUCCESS_RESPONSE << endl;
 }
 

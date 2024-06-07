@@ -14,6 +14,7 @@ class Course{
         
         int get_id();
         string get_name();
+        int get_min_semester();
 
         bool can_professor_take_this_course(int major_id);
         bool can_student_take_this_course(int major_id, int semester);

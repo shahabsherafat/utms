@@ -80,3 +80,23 @@ void Professor::add_ta_form_if_you_can(OfferedCourse* target_course, string mess
     for(User* cu : connected_users)
         cu->add_notification(n);
 }
+
+void Professor::write_ta_form_requests_if_you_can(int ta_form_id, vector<string>& output){
+    TAForm* target_ta_form = get_ta_form(ta_form_id);
+    int num_of_requests = target_ta_form->get_num_of_requests();
+    output.push_back(WE_HAVE_RECEIVED_TEXT + SPACE + to_string(num_of_requests) + 
+                        SPACE + FOR_TEACHING_ASSISTANT_TEXT + NEWLINE);
+    target_ta_form->write_requests(output);
+    return;
+}
+
+TAForm* Professor::get_ta_form(int ta_form_id){
+    for(Medium* m : media){
+        if(m->get_id() == ta_form_id and dynamic_cast<TAForm*>(m)){
+            TAForm* target_ta_form = (TAForm*)m;
+            return target_ta_form;
+        }
+    }
+    
+    throw runtime_error(NOT_FOUND_RESPONSE);
+}

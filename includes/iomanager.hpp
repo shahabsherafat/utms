@@ -29,6 +29,9 @@ class IOManager{
         void handle_course_post(stringstream& arguments);
         void assign_add_ta_form_factors(stringstream& arguments, int& course_id, string& message);
         void handle_add_ta_form(stringstream& arguments);
+        void assign_results(vector<bool>& results, const vector<string>& output);
+        void handle_close_ta_form(stringstream& arguments);
+        void handle_ta_request(stringstream& arguments);
 
         void handle_see_courses(stringstream& arguments);
         void handle_see_personal_page(stringstream& arguments);

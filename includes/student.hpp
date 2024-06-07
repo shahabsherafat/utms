@@ -20,4 +20,6 @@ class Student : public User{
         void add_course_post_if_you_can(OfferedCourse* target_course, string title,
                                         string message, string image_address);
         bool is_participating_in_this_course(int course_id);
+        void add_assisting_course(OfferedCourse* assisting_course);
+        string get_ta_request_text();
 };

@@ -19,4 +19,7 @@ class Professor : public User{
                                         string message, string image_address);
         bool is_participating_in_this_course(int course_id);
         void add_ta_form_if_you_can(OfferedCourse* target_course, string message);
+        void write_ta_form_requests_if_you_can(int ta_form_id, vector<string>& output);
+        void close_ta_form_if_you_can(vector<bool> results, int ta_form_id);
+        TAForm* get_ta_form(int ta_form_id);
 };

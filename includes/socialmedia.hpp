@@ -32,6 +32,7 @@ class SocialMedia{
         User* find_user_by_id(int id);
         Course* find_course_by_id(int id);
         OfferedCourse* find_offered_course_by_id(int id);
+        Student* find_student_by_id(int student_id);
         void notify_every_one(notif n);
 
         void login(int id, string password);
@@ -43,6 +44,8 @@ class SocialMedia{
         void set_profile_photo(string photo_address);
         void add_course_post(int course_id, string title, string message, string image_address);
         void add_ta_form(int course_id, string message);
+        void close_ta_form(int ta_form_id, vector<bool> results);
+        void ta_request(int professor_id, int form_id);
 
         void write_all_offered_courses(vector<string>& output);
         void write_offered_course_by_id(int id, vector<string>& output);
@@ -52,6 +55,7 @@ class SocialMedia{
         void write_enrolled_courses(vector<string>& output);
         void write_course_channel(int course_id, vector<string>& output);
         void write_course_post(int course_id, int post_id, vector<string>& output);
+        void write_ta_form_requests(int ta_form_id, vector<string>& output);
 
         void remove_post(int id);
         void remove_enrolled_course(int id);
