@@ -1,3 +1,4 @@
-ID=0
-IMAGE=/default_profile.png
-NAME=UT_account
+ID=1
+IMAGE=/profile_images/1.png
+MAJOR=Computer Engineering
+NAME=Shahab

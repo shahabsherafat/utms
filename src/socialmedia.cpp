@@ -2,18 +2,6 @@
 
 SocialMedia::SocialMedia(){
     Admin* admin = new Admin(ADMIN_ID, ADMIN_PASSWORD, ADMIN_NAME);
-    OfferedCourse* o = new OfferedCourse(1, "salam", 1, 200, 2, "Ramtin", Time("sunday", 1, 2), Date(1400, 1, 1));
-    offered_courses.push_back(o);
-    o = new OfferedCourse(2, "salam", 1, 200, 2, "Ramtin", Time("sunday", 1, 2), Date(1400, 1, 1));
-    offered_courses.push_back(o);
-    o = new OfferedCourse(3, "salam", 1, 200, 2, "Ramtin", Time("sunday", 1, 2), Date(1400, 1, 1));
-    offered_courses.push_back(o);
-    o = new OfferedCourse(4, "salam", 1, 200, 2, "Ramtin", Time("sunday", 1, 2), Date(1400, 1, 1));
-    offered_courses.push_back(o);
-    o = new OfferedCourse(5, "salam", 1, 200, 2, "Ramtin", Time("sunday", 1, 2), Date(1400, 1, 1));
-    offered_courses.push_back(o);
-    o = new OfferedCourse(6, "salam", 1, 200, 2, "Ramtin", Time("sunday", 1, 2), Date(1400, 1, 1));
-    offered_courses.push_back(o);
     users.push_back(admin);
 }
 
