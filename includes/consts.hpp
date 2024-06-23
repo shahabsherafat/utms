@@ -27,6 +27,9 @@ const int STARTING_COURSE_POST_ID = 1;
 const int ADMIN_ID = 0;
 const string ADMIN_PASSWORD = "UT_account";
 const string ADMIN_NAME = "UT_account";
+const string STUDENT_TYPE = "student";
+const string PROFESSOR_TYPE = "professor";
+const string ADMIN_TYPE = "admin";
 
 const string POST_REQUEST = "POST";
 const string GET_REQUEST = "GET";
@@ -94,4 +97,10 @@ const string WE_HAVE_RECEIVED_TEXT = "We have received";
 const string FOR_TEACHING_ASSISTANT_TEXT = "requests for teaching assistant position";
 const string ACCEPTED_RESULT = "accept";
 const string REJECTED_RESULT = "reject";
-#define debug(x) cout << x << endl, exit(0);
+
+const string LOGIN_NOT_FOUND_ID_ERROR_URL = "/login?error=2";
+const string LOGIN_WRONG_PASSWORD_ERROR_URL = "/login?error=1";
+const string LOGIN_NOT_A_VALID_ID_ERROR_URL = "/login?error=3";
+
+const string DEFAULT_PROFILE_PICTURE_PATH = "/default_profile.png";
+const string DEFAULT_IMAGE_PATH = "https://images.vexels.com/media/users/3/131734/isolated/preview/05d86a9b63d1930d6298b27081ddc345-photo-preview-frame-icon.png";

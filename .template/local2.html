@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        window.onload = function () {
+            var url = new URL(window.location.href);
+            var error = url.searchParams.get("error");
+            var errorMessage = document.getElementById("error-message");
+            if (error) {
+                switch (error) {
+                    case '0':
+                        Swal.fire({
+                            title: "Successfully Done!",
+                            icon: "success"
+                        });
+                        break;
+                }
+            }
+        };
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+        :root {
+            --secondary-color: #000;
+            --background-color: #f5f5f5;
+            --container-bg-color: #fff;
+            --sidebar-bg-color: #800080;
+            --sidebar-link-color: #fff;
+            --sidebar-link-hover-bg-color: #555;
+            --box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            --primary-color: #DAA520;
+            --button-hover-bg-color: #c4951d;
+            --transition-duration: 0.3s;
+            --border-radius: 10px;
+            --font-family: 'Roboto', sans-serif;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background-color: var(--background-color);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 150px;
+        }
+
+        .container {
+            display: flex;
+            width: 60%;
+            max-width: 1200px;
+            background-color: var(--container-bg-color);
+            box-shadow: var(--box-shadow);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+        }
+
+        .sidebar {
+            background-color: var(--sidebar-bg-color);
+            padding: 20px;
+            width: 220px;
+            color: var(--sidebar-link-color);
+            text-align: center;
+            padding-top: 40px;
+            font-weight: bold;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+
+        }
+
+        .sidebar h2 {
+            margin-top: 0;
+            font-size: 1.6em;
+            margin-bottom: 40px;
+        }
+
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sidebar ul li {
+            font-size: 1.3em;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+
+        .sidebar ul li a {
+            text-decoration: none;
+            color: var(--sidebar-link-color);
+            transition: color var(--transition-duration);
+        }
+
+        .sidebar ul hr {
+            width: 100%;
+            border: 0;
+            height: 1px;
+            background-image: -webkit-linear-gradient(left, #19c9ff, #ffffff, #19c9ff);
+            background-image: -moz-linear-gradient(left, #19c9ff, #fffdfd, #19c9ff);
+            background-image: -ms-linear-gradient(left, #19c9ff, #ffffff, #19c9ff);
+            background-image: -o-linear-gradient(left, #19c9ff, #ffffff, #19c9ff);
+            color: #ffffff;
+        }
+
+        .sidebar ul li a:hover {
+            color: #A1A4AC;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 40px;
+        }
+
+        .main-content h1 {
+            margin-top: 0;
+            font-size: 2em;
+            color: var(--secondary-color);
+            text-align: center;
+        }
+
+        .main-content p {
+            color: #555555;
+        }
+
+        .image-photo img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            margin-left: 580px;
+        }
+
+        .image-photo {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .info .title {
+            font-weight: bold;
+            color: #9d9a00;
+        }
+
+        .info {
+            margin: 20px 0;
+            font-size: 25px;
+            text-align: center;
+        }
+
+        .info .data {
+            color: #555;
+            transition: color 0.3s ease;
+            text-align: center;
+        }
+
+        .info .data:hover {
+            color: #ADB0B2;
+            text-align: center;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <h2>Dashboard</h2>
+            <ul>
+                <li><a href="/add_post" class="fas fa-plus"> Add Post</a></li>
+                <hr>
+                <li><a href="/course_offer" class="fas fa-book-open"> Course Offer</a></li>
+                <hr>
+                <li><a href="/logout" class="fas fa-sign-out-alt"> Logout</a></li>
+            </ul>
+        </div>
+        <div class="main-content">
+
+            <h1>General Info</h1>
+            <div class="image-photo">
+                <img src="<%cout << context["IMAGE"];%>" alt="Logo">
+            </div>
+
+            <div class="info-box">
+
+                <div class="info">
+                    <span class="title">ID: </span>
+                    <span class="data">
+                        <% cout << context["ID"]; %>
+                    </span>
+                </div>
+
+                <hr>
+
+                <div class="info">
+                    <span class="title">Name: </span>
+                    <span class="data">
+                        <% cout << context["NAME"]; %>
+                    </span>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

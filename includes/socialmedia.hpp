@@ -7,6 +7,7 @@
 #include "admin.hpp"
 #include "offeredcourse.hpp"
 #include "notification.hpp"
+#include <map>
 
 class SocialMedia{
     private:
@@ -17,9 +18,16 @@ class SocialMedia{
         bool is_logged_in = false;
         User* logged_in_user = NULL;
         int last_offered_course_id = STARTING_OFFERED_COURSES_ID;
+        map<string, User*> servicing_users;
     public:
         SocialMedia();
         ~SocialMedia();
+        User* get_logged_in_user();
+        string get_logged_in_user_type();
+        bool is_servicing(string session_id);
+        void change_logged_in_user(string session_id);
+        bool is_there_this_user(int id);
+        User* get_user_by_id(int id);
         
         void add_course(int id, string name, int credit, int prerequisite, vector<int> major_ids);
         void add_major(int id, string name);
@@ -35,8 +43,8 @@ class SocialMedia{
         Student* find_student_by_id(int student_id);
         void notify_every_one(notif n);
 
-        void login(int id, string password);
-        void logout();
+        void login(int id, string password, string session_id);
+        void logout(string session_id);
         void add_post(string title, string message, string image_address);
         void connect(int id);
         void offer_new_course(int course_id, int professor_id, int capacity, string time,
@@ -47,12 +55,11 @@ class SocialMedia{
         void close_ta_form(int ta_form_id, vector<bool> results);
         void ta_request(int professor_id, int form_id);
 
-        void write_all_offered_courses(vector<string>& output);
-        void write_offered_course_by_id(int id, vector<string>& output);
+        void write_all_offered_courses(vector<vector<string>>& output);
         void write_page_info_by_id(int id, vector<string>& output);
         void write_post_by_id(int user_id, int post_id, vector<string>& output);
         void write_notifications(vector<string>& output);
-        void write_enrolled_courses(vector<string>& output);
+        void write_enrolled_courses(vector<vector<string>>& output);
         void write_course_channel(int course_id, vector<string>& output);
         void write_course_post(int course_id, int post_id, vector<string>& output);
         void write_ta_form_requests(int ta_form_id, vector<string>& output);

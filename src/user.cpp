@@ -16,6 +16,18 @@ int User::get_id(){
     return id;
 }
 
+string User::get_name(){
+    return name;
+}
+
+string User::get_profile_image(){
+    return profile_photo_address;
+}
+
+string User::get_next_post_id(){
+    return to_string(last_post_id + 1);
+}
+
 bool User::is_authenticated(string entered_password){
     return entered_password == password;
 }
@@ -120,4 +132,16 @@ void User::write_page_info(vector<string>& output){
 
 void User::set_profile_photo(string photo_address){
     profile_photo_address = photo_address;
+}
+
+vector<vector<string>> User::get_posts(){
+    vector<vector<string>> output;
+    for(int i = media.size() - 1; i >= 0; i--){
+        if(dynamic_cast<Post*>(media[i])){
+            Post* post = (Post*)media[i];
+            output.push_back({post->get_title(), post->get_image_address()});
+        }
+    }
+
+    return output;
 }

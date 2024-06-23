@@ -20,6 +20,9 @@ class User{
         User(int init_id, string init_password, string init_name);
         ~User();
         int get_id();
+        string get_name();
+        string get_profile_image();
+        string get_next_post_id();
         bool is_authenticated(string entered_password);
         void add_post(string title, string message, string image_address);
         void remove_post(int id);
@@ -34,4 +37,6 @@ class User{
         virtual void add_course_post_if_you_can(OfferedCourse* target_course, string title
                                                 , string message, string image_address) = 0;
         virtual bool is_participating_in_this_course(int course_id) = 0;
+
+        vector<vector<string>> get_posts();
 };

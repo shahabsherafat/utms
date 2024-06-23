@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Page</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        window.onload = function () {
+            var url = new URL(window.location.href);
+            var error = url.searchParams.get("error");
+            var errorMessage = document.getElementById("error-message");
+            if (error) {
+                switch (error) {
+                    case '0':
+                        Swal.fire({
+                            title: "Successfully Done!",
+                            icon: "success"
+                        });
+                        break;
+                }
+            }
+        };
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+        :root {
+            --secondary-color: #000;
+            --background-color: #f5f5f5;
+            --container-bg-color: #fff;
+            --sidebar-bg-color: #08c5fe;
+            --sidebar-link-color: #fff;
+            --sidebar-link-hover-bg-color: #555;
+            --box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            --primary-color: #DAA520;
+            --button-hover-bg-color: #c4951d;
+            --transition-duration: 0.3s;
+            --border-radius: 10px;
+            --font-family: 'Roboto', sans-serif;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background-color: var(--background-color);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 140px;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            text-align: center;
+            width: 40%;
+            background-color: var(--container-bg-color);
+            box-shadow: var(--box-shadow);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            padding-bottom: 30px;
+        }
+
+        .personal-info
+        .posts {
+            flex: 1;
+            padding: 40px;
+        }
+
+        .personal-info h1
+        .posts h1 {
+            margin-top: 0;
+            margin-bottom: 0px;
+            font-size: 2em;
+            color: var(--secondary-color);
+        }
+
+        .personal-info p
+        .posts p {
+            color: #555555;
+        }
+
+        .info-card {
+            margin: auto;
+            margin-top: 20px;
+            padding: 16px;
+            width: calc(100% - 256px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+            text-align: center;
+        }
+
+        .info-card h2 {
+            color: #2c3e50;
+            font-size: 1.5em;
+        }
+
+        .info-card h3 {
+            color: #34495e;
+            font-size: 1.2em;
+        }
+
+        .info-card p {
+            color: #7f8c8d;
+        }
+
+        .post-card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 16px;
+            margin: auto;
+            margin-top: 20px;
+            width: calc(100% - 300px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+            text-align: center;
+            background-color: rgb(255, 255, 226);
+        }
+
+        .post-card h2 {
+            color: #2c3e50;
+            font-size: 1.5em;
+        }
+
+        .post-card h3 {
+            color: #34495e;
+            font-size: 1.2em;
+        }
+
+        .post-card p {
+            color: #7f8c8d;
+        }
+
+        .post-card img {
+            width: 200px;
+            height: 200px;
+            border-radius: 10%;
+        }
+
+        .image-photo img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+        }
+
+        /* Add a hover effect */
+        .post-card:hover {
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+
+<body>
+    <div class="container">
+        <a style="margin-top: 0px ;margin-left:82% ;" href="/dashboard" class="Dashboard-link">My Dashboard</a>
+        <div class="personal-info">
+            <h1>Personal Info:</h1>
+
+            
+            <div class="info-card">
+                <h2>User Type: <%cout << context["TYPE"];%></h2>
+
+                <%if(context["TYPE"] == "student"){%>
+                    <h3>Name: <%cout << context["NAME"];%></h3>
+                    <p>Semester: <%cout << context["SEMESTER"];%></p>
+                    
+                    <div class="image-photo">
+                        <img src="<% cout << context["IMAGE"]; %>" alt="Logo">
+                    </div>
+                <%}%>
+
+                <%if(context["TYPE"] == "professor"){%>
+                    <h3>Name: <%cout << context["NAME"];%></h3>
+                    <p>Position: <%cout << context["POSITION"];%></p>
+                    
+                    <div class="image-photo">
+                        <img src="<% cout << context["IMAGE"]; %>" alt="Logo">
+                    </div>
+                <%}%>
+
+                <%if(context["TYPE"] == "admin"){%>
+                    <h3>Name: <%cout << context["NAME"];%></h3>
+                    
+                    <div class="image-photo">
+                        <img src="<% cout << context["IMAGE"]; %>" alt="Logo">
+                    </div>
+                <%}%>
+            </div>
+
+        </div>
+        
+        <div class="posts">
+            <h1>Posts:</h1>
+
+            <%for(int i = 0; i < stoi(context["size"]); i++){%>
+                <div class="post-card">
+                    <h3>Title: <%cout << context["title" + to_string(i)];%></h3>
+                    
+                    <div class="post-photo">
+                        <img src="<% cout << context["pic" + to_string(i)]; %>" alt="Logo">
+                    </div>
+                </div>
+            <%}%>
+        </div>
+
+    </div>
+
+</body>
+
+</html>

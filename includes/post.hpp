@@ -9,4 +9,5 @@ class Post : public Medium{
     public:
         Post(string init_title, string init_message, int init_id, string init_image_address);
         string get_title();
+        string get_image_address();
 };

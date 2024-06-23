@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login Page</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      font-size: 1.2em;
+      background-color: #f4f4f4;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 20vh;
+    }
+
+    .login-container {
+      background-color: white;
+      font-size: 1.2em;
+      padding: 50px;
+      border-radius: 5px;
+      box-shadow: 0 0 50px rgba(0, 0, 0, 0.1);
+    }
+
+    .login-container h2 {
+      text-align: center;
+      margin-top: 0;
+      margin-bottom: 30px;
+    }
+
+    .login-form {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .login-form label {
+      margin-bottom: 15px;
+      margin-top: 20px;
+    }
+
+    .login-form input[type="text"],
+    .login-form input[type="password"] {
+      width: calc(100% - 20px);
+      font-size: 1em;
+      padding: 15px;
+      margin-bottom: 10px;
+      border-radius: 5px;
+      border: 1px solid #8a8f84;
+      /* Added border */
+      box-sizing: border-box;
+    }
+
+    .login-form input[type="text"]:hover,
+    .login-form input[type="password"]:hover {
+      border-color: #2fa735;
+      /* Added border */
+    }
+
+    .login-form input[type="text"]:focus,
+    .login-form input[type="password"]:focus {
+      border-color: blue;
+      /* Added border */
+    }
+
+    .login-form input[type="submit"] {
+      width: calc(100% - 20px);
+      padding: 10px;
+      background-color: #5cb85c;
+      color: white;
+      border-radius: 5px;
+      border: none;
+      cursor: pointer;
+      margin-top: 25px;
+      font-size: 1em;
+    }
+
+    .login-form input[type="submit"]:hover {
+      background-color: #2fa735;
+    }
+
+    #error-message {
+      margin-top: 15px;
+      text-align: center;
+      margin-right: 15px;
+    }
+  </style>
+
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <script>
+    window.onload = function () {
+      var url = new URL(window.location.href);
+      var error = url.searchParams.get("error");
+      var errorMessage = document.getElementById("error-message");
+      if (error) {
+        switch (error) {
+          case '1':
+            Swal.fire({
+              title: "Wrong password!",
+              text: "Please try again.",
+              icon: "error"
+            });
+            break;
+          case '2':
+            Swal.fire({
+              title: "Not found id!",
+              text: "Please try again.",
+              icon: "error"
+            });
+            break;
+          case '3':
+            Swal.fire({
+              title: "Not a valid id!",
+              text: "Please try again!",
+              icon: "error"
+            });
+            break;
+        }
+      }
+    };
+  </script>
+
+
+</head>
+
+<body>
+  <div class="login-container">
+    <h2>Login</h2>
+    <form class="login-form" action="/login" method="post">
+      <label for="Id">Id:</label>
+      <input type="text" placeholder="Your Id" name="id" required>
+
+      <label for="Password">Password:</label>
+      <input type="password" placeholder="Your Password" name="password" required>
+
+      <input type="submit" value="Login">
+    </form>
+  </div>
+</body>
+
+</html>

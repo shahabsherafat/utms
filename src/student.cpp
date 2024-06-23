@@ -51,12 +51,11 @@ void Student::add_attended_course(OfferedCourse* o){
     notify_to_connected_users(n);
 }
 
-void Student::write_enrolled_courses(vector<string>& output){
-    if(attended_courses.size() == 0){
-        throw runtime_error(EMPTY_RESPONSE);
-    }
+void Student::write_enrolled_courses(vector<vector<string>>& output){
     for(OfferedCourse* o : attended_courses){
-        o -> write_detailed_info(output);
+        vector<string> data;
+        o -> write_detailed_info(data);
+        output.push_back(data);
     }
 }
 

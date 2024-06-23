@@ -10,3 +10,7 @@ Post::Post(string init_title, string init_message, int init_id, string init_imag
 string Post::get_title(){
     return title;
 }
+
+string Post::get_image_address(){
+    return image_address;
+}

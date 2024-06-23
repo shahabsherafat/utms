@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course Offer</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        window.onload = function () {
+            var url = new URL(window.location.href);
+            var error = url.searchParams.get("error");
+            var errorMessage = document.getElementById("error-message");
+            if (error) {
+                switch (error) {
+                    case '1':
+                        Swal.fire({
+                            title: "Not Valid Numbers!",
+                            icon: "error"
+                        });
+                        break;
+
+                    case '2':
+                        Swal.fire({
+                            title: "Not Found User Id Or Course!",
+                            icon: "error"
+                        });
+                        break;
+
+                    case '3':
+                        Swal.fire({
+                            title: "Not Allowed Professor Or Time Interference!",
+                            icon: "error"
+                        });
+                        break;
+                }
+            }
+        };
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+        :root {
+            --secondary-color: #000;
+            --background-color: #f5f5f5;
+            --container-bg-color: #fff;
+            --sidebar-bg-color: #08c5fe;
+            --sidebar-link-color: #fff;
+            --sidebar-link-hover-bg-color: #555;
+            --box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            --primary-color: #DAA520;
+            --button-hover-bg-color: #c4951d;
+            --transition-duration: 0.3s;
+            --border-radius: 10px;
+            --font-family: 'Roboto', sans-serif;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background-color: var(--background-color);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 140px;
+        }
+
+        .container {
+            display: flex;
+            width: 50%;
+            max-width: 1200px;
+            background-color: var(--container-bg-color);
+            box-shadow: var(--box-shadow);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 40px;
+        }
+
+        .main-content h1 {
+            margin-top: 0;
+            font-size: 2em;
+            color: var(--secondary-color);
+        }
+
+        .main-content p {
+            color: #555555;
+        }
+        
+        .form {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .data {
+            margin-right: 10px;
+            margin-top: 10px;
+            display: flex;
+            flex-direction: row;
+        }
+        
+        .field {
+            width: 30%;
+            height: 40px;
+            padding: 12px 20px;
+            display: inline-block;
+            border: 2px solid #ccc;
+            box-sizing: border-box;
+            margin: auto;
+            border-radius: 1em;
+            font-size: 1.1em;
+        }
+        
+        input[type="submit"] {
+            width: 50%;
+            padding: 10px;
+            margin: ce;
+            background-color: #5cb85c;
+            color: white;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            margin-top: 40px;
+            font-size: 1em;
+            margin-left: 190px;
+        }
+        
+        input[type="submit"]:hover {
+            background-color: #2fa735;
+        }
+
+        label {
+            margin-top: 10px;
+            margin-right: 0px;
+            margin-left: 10px;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="main-content">
+
+
+            <a style="margin-top: 0px ;margin-left:85% ;" href="/dashboard" class="Dashboard-link">My Dashboard</a>
+            <div class="form-container">
+                <h1 style="text-align: center; margin-bottom: 5%; margin-right: 40px;">Offer A New Course</h1>
+                <form class="form" action="/course_offer" method="post" enctype="multipart/form-data">
+
+                    <div class="data">
+                        <label for="course_id" style="font-size: 1.1em;">Course Id:</label>
+                        <input type="text" placeholder="exp: 1" name="course_id" class="field" maxlength="9"
+                            id="course_id" required>
+
+                        <label for="professor_id" style="font-size: 1.1em;">Professor Id:</label>
+                        <input type="text" placeholder="exp: 810420500" name="professor_id" class="field" maxlength="9"
+                            id="professor_id" required>
+                    </div>
+
+                    <div class="data">
+                        <label for="capacity" style="font-size: 1.1em;">Capacity:</label>
+                        <input type="text" placeholder="exp: 70" name="capacity" class="field" maxlength="9"
+                            id="capacity" required>
+
+                        <label for="time" style="font-size: 1.1em;">Time:</label>
+                        <input type="text" placeholder="exp: Sunday:12-13" name="time" class="field"
+                            id="time" required>
+                    </div>
+
+                    <div class="data">
+                        <label for="exam_date" style="font-size: 1.1em;">Exam Date:</label>
+                        <input type="text" placeholder="exp: 1403/4/4" name="exam_date" class="field"
+                            id="exam_date" required>
+
+                        <label for="class_number" style="font-size: 1.1em;">Class Number:</label>
+                        <input type="text" placeholder="exp: 2" name="class_number" class="field" maxlength="9"
+                            id="class_number" required>
+                    </div>
+
+                    <input type="submit" value="Offer" style=" font-size: 1.3em;" >
+                </form>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

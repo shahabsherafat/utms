@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search User</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        window.onload = function () {
+            var url = new URL(window.location.href);
+            var error = url.searchParams.get("error");
+            var errorMessage = document.getElementById("error-message");
+            if (error) {
+                switch (error) {
+                    case '1':
+                        Swal.fire({
+                            title: "User Not Found!",
+                            icon: "error"
+                        });
+                        break;
+
+                        case '2':
+                        Swal.fire({
+                            title: "Not A Valid Id!",
+                            icon: "error"
+                        });
+                        break;
+                }
+            }
+        };
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+        :root {
+            --secondary-color: #000;
+            --background-color: #f5f5f5;
+            --container-bg-color: #fff;
+            --sidebar-bg-color: #08c5fe;
+            --sidebar-link-color: #fff;
+            --sidebar-link-hover-bg-color: #555;
+            --box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            --primary-color: #DAA520;
+            --button-hover-bg-color: #c4951d;
+            --transition-duration: 0.3s;
+            --border-radius: 10px;
+            --font-family: 'Roboto', sans-serif;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background-color: var(--background-color);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 140px;
+        }
+
+        .container {
+            display: flex;
+            width: 50%;
+            max-width: 1200px;
+            background-color: var(--container-bg-color);
+            box-shadow: var(--box-shadow);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 40px;
+        }
+
+        .main-content h1 {
+            margin-top: 0;
+            font-size: 2em;
+            color: var(--secondary-color);
+        }
+
+        .main-content p {
+            color: #555555;
+        }
+
+
+        .user-id {
+            width: 50%;
+            height: 40px;
+            padding: 12px 20px;
+            display: inline-block;
+            border: 2px solid #ccc;
+            box-sizing: border-box;
+            margin-top: 8px;
+            margin-left: 0px;
+            border-radius: 1em;
+            font-size: 1.1em;
+        }
+
+        input[type="submit"] {
+            width: 50%;
+            padding: 10px;
+            margin: ce;
+            background-color: #5cb85c;
+            color: white;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            margin-top: 40px;
+            font-size: 1em;
+            margin-left: 190px;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #2fa735;
+        }
+
+        .id-field{
+            text-align: center;
+            margin-right: 40px;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="main-content">
+
+
+            <a style="margin-top: 0px ;margin-left:85% ;" href="/dashboard" class="Dashboard-link">My Dashboard</a>
+            <div class="form-container">
+                <h1 style="text-align: center; margin-bottom: 5%; margin-right: 40px;">Search A User</h1>
+                <form class="form" action="/search_user" method="post" enctype="multipart/form-data">
+
+                    <div class="id-field">
+                        <label  for="id" style="font-size: 1.3em; text-align: center;">User Id:</label>
+                        <br>
+
+                        <input type="text" placeholder="exp: 1" name="id" class="user-id" maxlength="10"
+                            id="id" required>
+                        
+                    </div>
+
+                    <input type="submit" value="Search" style=" font-size: 1.3em;" >
+                </form>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

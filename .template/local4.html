@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Post</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        window.onload = function () {
+            var url = new URL(window.location.href);
+            var error = url.searchParams.get("error");
+            var errorMessage = document.getElementById("error-message");
+            if (error) {
+                switch (error) {
+                    case '0':
+                        Swal.fire({
+                            title: "Successfully Done!",
+                            icon: "success"
+                        });
+                        break;
+                }
+            }
+        };
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+        :root {
+            --secondary-color: #000;
+            --background-color: #f5f5f5;
+            --container-bg-color: #fff;
+            --sidebar-bg-color: #08c5fe;
+            --sidebar-link-color: #fff;
+            --sidebar-link-hover-bg-color: #555;
+            --box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            --primary-color: #DAA520;
+            --button-hover-bg-color: #c4951d;
+            --transition-duration: 0.3s;
+            --border-radius: 10px;
+            --font-family: 'Roboto', sans-serif;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background-color: var(--background-color);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 140px;
+        }
+
+        .container {
+            display: flex;
+            width: 50%;
+            max-width: 1200px;
+            background-color: var(--container-bg-color);
+            box-shadow: var(--box-shadow);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 40px;
+        }
+
+        .main-content h1 {
+            margin-top: 0;
+            font-size: 2em;
+            color: var(--secondary-color);
+        }
+
+        .main-content p {
+            color: #555555;
+        }
+
+
+        .post-title {
+            width: 50%;
+            height: 40px;
+            padding: 12px 20px;
+            display: inline-block;
+            border: 2px solid #ccc;
+            box-sizing: border-box;
+            margin-top: 8px;
+            border-radius: 1em;
+            font-size: 1.1em;
+        }
+
+        textarea {
+            font-family: var(--font-family);
+            width: 50%;
+            height: 170px;
+            padding: 12px 20px;
+            display: inline-block;
+            border: 2px solid #ccc;
+            box-sizing: border-box;
+            margin-top: 8px;
+            border-radius: 1em;
+            overflow: hidden;
+            resize: none;
+            font-size: 1.1em;
+        }
+
+        .message-label {
+            margin-top: 40px;
+        }
+
+        input[type="submit"] {
+            width: 50%;
+            padding: 10px;
+            margin: ce;
+            background-color: #5cb85c;
+            color: white;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            margin-top: 40px;
+            font-size: 1em;
+            margin-left: 190px;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #2fa735;
+        }
+
+        input[type="file"] {
+            margin-left: 50px;
+        }
+
+        .chooseFile {
+            position: absolute;
+            left: 52%;
+            top: 33%;
+            display: flex;
+            flex-direction: column;
+            
+        }
+
+        #imagePreview {
+            border: 2px solid #000;
+            margin-left: 50px;
+            margin-top: 33px;
+            border-radius: 10%;
+            width: 300px;
+            height: 200px;
+            object-fit: contain;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="main-content">
+
+
+            <a style="margin-top: 0px ;margin-left:85% ;" href="/dashboard" class="Dashboard-link">My Dashboard</a>
+            <div class="form-container">
+                <h1 style="text-align: center; margin-bottom: 10%;">Add A New Post</h1>
+                <form class="form" action="/add_post" method="post" enctype="multipart/form-data">
+                    <div class="chooseFile">
+                        <label style="margin-left: 50px;margin-bottom:10px ;">Post Image(Optional):</label>
+
+                        <input type="file" id="imageInput" accept="image/*" name="post-image">
+                        <img id="imagePreview" src="https://images.vexels.com/media/users/3/131734/isolated/preview/05d86a9b63d1930d6298b27081ddc345-photo-preview-frame-icon.png">
+
+                    </div>
+
+                    <div>
+                        <label for="Title" style="font-size: 1.1em;">Title:</label>
+                        <br>
+
+                        <input type="text" placeholder="Post Title" name="title" class="post-title" maxlength="30"
+                            id="Title" required>
+                        <br><br>
+
+                        <label for="Message">Message:</label>
+                        <br>
+
+                        <textarea id="Message" rows="3" cols="20" name="title" placeholder="Post Message"
+                            required></textarea>
+                    </div>
+
+
+                    <input type="submit" value="Add">
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('imageInput').addEventListener('change', function (event) {
+            var reader = new FileReader();
+            reader.onload = function () {
+                var output = document.getElementById('imagePreview');
+                output.src = reader.result;
+                output.style.display = 'block';
+            };
+            reader.readAsDataURL(event.target.files[0]);
+        });
+    </script>
+
+</body>
+
+</html>

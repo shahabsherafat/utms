@@ -38,6 +38,10 @@ string Professor::get_name(){
     return name;
 }
 
+string Professor::get_position(){
+    return position;
+}
+
 void Professor::add_offered_course(OfferedCourse* o){
     Time time = o->get_holding_time();
 

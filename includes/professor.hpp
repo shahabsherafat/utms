@@ -14,6 +14,7 @@ class Professor : public User{
         string get_personal_info_string();
         int get_major_id();
         string get_name();
+        string get_position();
         void add_offered_course(OfferedCourse* o);
         void add_course_post_if_you_can(OfferedCourse* target_course, string title,
                                         string message, string image_address);

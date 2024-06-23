@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attending Courses</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        window.onload = function () {
+            var url = new URL(window.location.href);
+            var error = url.searchParams.get("error");
+            var errorMessage = document.getElementById("error-message");
+            if (error) {
+                switch (error) {
+                    case '0':
+                        Swal.fire({
+                            title: "Successfully Done!",
+                            icon: "success"
+                        });
+                        break;
+                }
+            }
+        };
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+        :root {
+            --secondary-color: #000;
+            --background-color: #f5f5f5;
+            --container-bg-color: #fff;
+            --sidebar-bg-color: #08c5fe;
+            --sidebar-link-color: #fff;
+            --sidebar-link-hover-bg-color: #555;
+            --box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            --primary-color: #DAA520;
+            --button-hover-bg-color: #c4951d;
+            --transition-duration: 0.3s;
+            --border-radius: 10px;
+            --font-family: 'Roboto', sans-serif;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background-color: var(--background-color);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 140px;
+        }
+
+        .container {
+            display: flex;
+            width: 40%;
+            background-color: var(--container-bg-color);
+            box-shadow: var(--box-shadow);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 40px;
+        }
+
+        .main-content h1 {
+            margin-top: 0;
+            margin-bottom: 0px;
+            font-size: 2em;
+            color: var(--secondary-color);
+        }
+
+        .main-content p {
+            color: #555555;
+        }
+
+        .course-card {
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 16px;
+            margin: auto;
+            margin-top: 20px;
+            width: calc(100% - 100px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+            background-color: rgb(255, 255, 226);
+        }
+
+        .course-card h2 {
+            color: #2c3e50;
+            font-size: 1.5em;
+        }
+
+        .course-card h3 {
+            color: #34495e;
+            font-size: 1.2em;
+        }
+
+        .course-card p {
+            color: #000000;
+            margin: auto;
+            font-size: 1.1em;
+        }
+
+        /* Add a hover effect */
+        .course-card:hover {
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .data {
+            display: flex;
+            flex-direction: row;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="main-content">
+
+            <a style="margin-top: 0px ;margin-left:82% ;" href="/dashboard" class="Dashboard-link">My Dashboard</a>
+            <%for(int i = 0; i < stoi(context["SIZE"]); i++){%>
+                <div class="course-card">
+                    <div class="data">
+                        <p>Course ID: <%cout << context["id" + to_string(i)];%></p>
+                        <p>Course Name: <%cout << context["name" + to_string(i)];%></p>
+                    </div>
+                    
+                    <div class="data">
+                        <p>Professor Name: <%cout << context["pr_name" + to_string(i)];%></p>
+                        <p>Capacity: <%cout << context["capacity" + to_string(i)];%></p>
+                    </div>
+
+                    <div class="data">
+                        <p>Time: <%cout << context["time" + to_string(i)];%></p>
+                        <p>Exam Date: <%cout << context["exam_date" + to_string(i)];%></p>
+                        <p>Class Number: <%cout << context["class_number" + to_string(i)];%></p>
+                    </div>
+                </div>
+            <%}%>
+
+        </div>
+    </div>
+
+</body>
+
+</html>

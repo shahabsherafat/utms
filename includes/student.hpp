@@ -15,7 +15,7 @@ class Student : public User{
         int get_major_id();
         int get_semester();
         void add_attended_course(OfferedCourse* o);
-        void write_enrolled_courses(vector<string>& output);
+        void write_enrolled_courses(vector<vector<string>>& output);
         void remove_enrolled_course(OfferedCourse* o);
         void add_course_post_if_you_can(OfferedCourse* target_course, string title,
                                         string message, string image_address);

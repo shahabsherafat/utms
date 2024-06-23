@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Set Profile</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        window.onload = function () {
+            var url = new URL(window.location.href);
+            var error = url.searchParams.get("error");
+            var errorMessage = document.getElementById("error-message");
+            if (error) {
+                switch (error) {
+                    case '0':
+                        Swal.fire({
+                            title: "Successfully Done!",
+                            icon: "success"
+                        });
+                        break;
+                }
+            }
+        };
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+        :root {
+            --secondary-color: #000;
+            --background-color: #f5f5f5;
+            --container-bg-color: #fff;
+            --sidebar-bg-color: #08c5fe;
+            --sidebar-link-color: #fff;
+            --sidebar-link-hover-bg-color: #555;
+            --box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            --primary-color: #DAA520;
+            --button-hover-bg-color: #c4951d;
+            --transition-duration: 0.3s;
+            --border-radius: 10px;
+            --font-family: 'Roboto', sans-serif;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background-color: var(--background-color);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 140px;
+        }
+
+        .container {
+            display: flex;
+            width: 40%;
+            background-color: var(--container-bg-color);
+            box-shadow: var(--box-shadow);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+        }
+        
+        .main-content {
+            flex: 1;
+            padding: 40px;
+        }
+
+        .main-content h1 {
+            margin-top: 0;
+            margin-bottom: 0px;
+            font-size: 2em;
+            color: var(--secondary-color);
+        }
+
+        .main-content p {
+            color: #555555;
+        }
+
+        input[type="submit"] {
+            width: 50%;
+            padding: 10px;
+            background-color: #5cb85c;
+            color: white;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            margin-top: 30px;
+            font-size: 1em;
+            margin-left: 172px;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #2fa735;
+        }
+
+        input[type="file"] {
+            margin-left: 50px;
+        }
+
+        .chooseFile {
+            position: relative;
+            left: 20%;            
+            
+            display: flex;
+            flex-direction: column;
+            
+        }
+
+        #imagePreview {
+            border: 2px solid #000;
+            margin-left: 50px;
+            margin-top: 33px;
+            border-radius: 10%;
+            width: 300px;
+            height: 200px;
+            object-fit: contain;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="main-content">
+            
+            <a style="margin-top: 0px ;margin-left:82% ;" href="/dashboard" class="Dashboard-link">My Dashboard</a>
+            <div class="form-container">
+                <h1 style="text-align: center; margin-bottom: 7%;">Set A Profile Picture</h1>
+                <form class="form" action="/set_profile" method="post" enctype="multipart/form-data">
+                    <div class="chooseFile">
+                        <label style="margin-left: 50px;margin-bottom:10px ;">Choose Your Profile Picture:</label>
+
+                        <input type="file" id="imageInput" accept="image/*" name="profile-image">
+                        <img id="imagePreview" src="https://images.vexels.com/media/users/3/131734/isolated/preview/05d86a9b63d1930d6298b27081ddc345-photo-preview-frame-icon.png">
+
+                    </div>
+
+                    <input type="submit" value="Set">
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('imageInput').addEventListener('change', function (event) {
+            var reader = new FileReader();
+            reader.onload = function () {
+                var output = document.getElementById('imagePreview');
+                output.src = reader.result;
+                output.style.display = 'block';
+            };
+            reader.readAsDataURL(event.target.files[0]);
+        });
+    </script>
+
+</body>
+
+</html>
